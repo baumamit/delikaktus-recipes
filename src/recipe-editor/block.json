@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "create-block/recipe-editor",
+	"version": "0.1.0",
+	"title": "Recipe Editor",
+	"category": "widgets",
+	"attributes": {
+		"blockHeading": {"type": "string", "default": "Ingredients"},
+		"unitSystem": {"type": "string", "default": ""},
+		"ingredientUnitType": {"type": "string", "default": ""},
+		"ingredientQuantity": {"type": "string", "default": ""},
+		"ingredientUnitChoice": {"type": "string", "default": ""},
+		"ingredientName": {"type": "string", "default": ""}
+	},
+	"description": "Example block scaffolded with Create Block tool.",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "recipe-editor",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}

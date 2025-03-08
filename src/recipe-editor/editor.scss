@@ -1,0 +1,62 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor {
+	border: 3px dotted #f00;
+	align-items: center; /* Vertically center the elements */
+}
+
+h2.wp-block-heading, 
+.wp-block-heading input {
+	font-size: inherit; // Inherit the theme's h2 font size
+	font-weight: inherit; // Inherit weight
+	line-height: inherit; // Inherit line height
+	color: inherit; // Inherit text color
+	border: none; // Optional, removes borders
+	background: transparent; // Optional, no background
+	outline: none; // Optional, removes outline on focus
+	padding: 0; // Optional, removes default padding
+	margin: 0; // Optional, removes default margin
+	width: 100%; // Optional, ensures consistent width
+	display: inline-block; // Aligns inline like h2
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers {
+	display: block;
+	flex-wrap: wrap;  /* Allows wrapping if space is limited */
+	margin-bottom: 0.5rem;        /* Adds spacing between the inputs */
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-system {
+	width: 5rem;      /* Let the width adjust based on content */
+	padding: 0.1rem 0.2rem;
+	margin-right: 2rem;        /* Adds spacing between the inputs */
+	/* flex: 1; */          /* Ensures elements grow if there's space */
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container {
+	display: flex;
+	flex-wrap: wrap;  /* Allows wrapping if space is limited */
+	gap: 0.5rem;        /* Adds spacing between the inputs */
+	align-items: center; /* Vertically center the elements */
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity,
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-choice {
+	width: 4rem;      /* Let the width adjust based on content */
+	padding: 0.2rem 0.5rem;
+	/* flex: 1; */          /* Ensures elements grow if there's space */
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-ingredient-name {
+	min-width: 10rem;  /* Minimum width to prevent collapsing */
+	width: auto;      /* Let the width adjust based on content */
+	padding: 0.2rem 0.5rem;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	flex: 1;          /* Ensures elements grow if there's space */
+}
