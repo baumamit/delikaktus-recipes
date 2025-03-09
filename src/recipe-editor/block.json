@@ -7,9 +7,10 @@
 	"category": "widgets",
 	"attributes": {
 		"blockHeading": {"type": "string", "default": "Ingredients"},
-		"unitSystem": {"type": "string", "default": ""},
+		"unitSystem": {"type": "string", "default": "metric"},
 		"ingredientUnitType": {"type": "string", "default": ""},
 		"ingredientQuantity": {"type": "string", "default": ""},
+		"ingredientQuantityFraction": {"type": "string", "default": ""},
 		"ingredientUnitChoice": {"type": "string", "default": ""},
 		"ingredientName": {"type": "string", "default": ""}
 	},

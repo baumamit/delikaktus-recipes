@@ -1,8 +1,6 @@
 import { useState } from '@wordpress/element';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 // Import block toolbar icons
-//import { FaBalanceScale, FaBalanceScaleLeft, FaBalanceScaleRight } from "react-icons/fa";
-import { FaRegStar, FaBalanceScaleLeft ,FaBalanceScale ,FaBalanceScaleRight } from "react-icons/fa";
 import { TbCircleLetterMFilled ,TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
 
 /**
@@ -51,6 +49,21 @@ const UnitType = {
 	TOOL: 'tool',
 };
 
+//Object of unit choices matching every unit system and unit type
+const unitOptions = {
+	[UnitSystem.METRIC]: {
+		[UnitType.MASS]: ['g', 'kg'],
+		[UnitType.VOLUME]: ['ml', 'L'],
+		[UnitType.TOOL]: ['cup', 'tsp', 'Tbsp'],
+	},
+	[UnitSystem.IMPERIAL]: {
+		[UnitType.MASS]: ['oz', 'lbs'],
+		[UnitType.VOLUME]: ['pint', 'qt'],
+		[UnitType.TOOL]: ['cup', 'tsp', 'Tbsp'],
+	},
+	[UnitSystem.DEFAULT]: {} //null,
+};
+
 export default function Edit(props) {
 	const { attributes, setAttributes } = props;
 	const { unitSystem } = attributes; // Get unitSystem from block attributes
@@ -62,7 +75,20 @@ export default function Edit(props) {
 		[UnitSystem.METRIC]: UnitSystem.IMPERIAL,
 		[UnitSystem.IMPERIAL]: UnitSystem.DEFAULT,
 		};
-		setAttributes({ unitSystem: nextUnitSystem[unitSystem] }); // Save to block attributes
+
+		const newUnitSystem = nextUnitSystem[unitSystem];
+		let newUnitType = props.attributes.ingredientUnitType;
+		// If the current unit type is not valid in the new unit system, reset it
+		if (!unitOptions[newUnitSystem]?.[newUnitType]) {
+			newUnitType = Object.keys(unitOptions[newUnitSystem] || {})[0] || '';
+		}
+		const newUnitChoice = unitOptions[newUnitSystem]?.[newUnitType]?.[0] || '';
+
+		setAttributes({ 
+			unitSystem: newUnitSystem, 
+			ingredientUnitType: newUnitType, 
+			ingredientUnitChoice: newUnitChoice//unitOptions[newUnitSystem][newUnitType] || ''
+		}); // Save to block attributes
 	};
 
 	// Choose the appropriate icon based on the current mode
@@ -72,7 +98,6 @@ export default function Edit(props) {
 			return <TbCircleLetterMFilled />;
 		case UnitSystem.IMPERIAL:
 			return <TbCircleLetterIFilled />;
-		case UnitSystem.DEFAULT:
 		default:
 			return <TbCircleDotFilled />;
 		}
@@ -82,159 +107,129 @@ export default function Edit(props) {
 		props.setAttributes({ blockHeading: e.target.value });
 	};
 
-	const handleUnitTypeChange = (e) => {
-		props.setAttributes({ingredientUnitType: e.target.value});
-	}
+	// Function to translate terms based on current language
+	const getTranslation = (text) => {
+		const translations = {
+		en: {
+			cup: 'cup',
+			tsp: 'tsp',
+			Tbsp: 'Tbsp'
+		},
+		it: {
+			cup: 'tazza',
+			tsp: 'cucchiaino',
+			Tbsp: 'cucchiaio'
+		},
+		he: {
+			cup: 'כוס',
+			tsp: 'כפית',
+			Tbsp: 'כף'
+		},
+		};
 
-	const handleQuantityChange = (e) => {
-		props.setAttributes({ingredientQuantity: e.target.value});
-	}
-
-	const renderUnitChoice = () => {
-		switch (props.attributes.unitSystem) {
-			case UnitSystem.METRIC:
-				switch (props.attributes.ingredientUnitType) {
-					case UnitType.MASS:
-						return (
-							<select 
-								onChange={handleUnitChoiceChange} 
-								name="Unit Choice" 
-								id="recipe-input-unit-choice" 
-								className="recipe-input-unit-choice"
-								value={props.attributes.ingredientUnitChoice} // This controls the selected option
-							>
-								<option value="g">g</option>
-								<option value="kg">kg</option>
-							</select>
-						);
-					case UnitType.VOLUME:
-						return (
-							<select 
-								onChange={handleUnitChoiceChange} 
-								name="Unit Choice" 
-								id="recipe-input-unit-choice" 
-								className="recipe-input-unit-choice"
-								value={props.attributes.ingredientUnitChoice} // This controls the selected option
-							>
-								<option value="ml">ml</option>
-								<option value="L">L</option>
-							</select>
-						);
-					case UnitType.TOOL:
-						return (
-							<select 
-								onChange={handleUnitChoiceChange} 
-								name="Unit Choice" 
-								id="recipe-input-unit-choice" 
-								className="recipe-input-unit-choice"
-								value={props.attributes.ingredientUnitChoice} // This controls the selected option
-							>
-								<option value="cup">cup</option>
-								<option value="tsp">tsp</option>
-								<option value="Tbsp">Tbsp</option>
-							</select>
-						);
-	
-					default:
-						return null;
-				}	
-		
-			case UnitSystem.IMPERIAL:
-				switch (props.attributes.ingredientUnitType) {
-					case UnitType.MASS:
-						return (
-							<select 
-								onChange={handleUnitChoiceChange} 
-								name="Unit Choice" 
-								id="recipe-input-unit-choice" 
-								className="recipe-input-unit-choice"
-								value={props.attributes.ingredientUnitChoice} // This controls the selected option
-							>
-								<option value="oz">oz</option>
-								<option value="lbs">lbs</option>
-							</select>
-						);
-					case UnitType.VOLUME:
-						return (
-							<select 
-								onChange={handleUnitChoiceChange} 
-								name="Unit Choice" 
-								id="recipe-input-unit-choice" 
-								className="recipe-input-unit-choice"
-								value={props.attributes.ingredientUnitChoice} // This controls the selected option
-							>
-								<option value="pint">pint</option>
-								<option value="qt">qt</option>
-							</select>
-						);
-					case UnitType.TOOL:
-						return (
-							<select 
-								onChange={handleUnitChoiceChange} 
-								name="Unit Choice" 
-								id="recipe-input-unit-choice" 
-								className="recipe-input-unit-choice"
-								value={props.attributes.ingredientUnitChoice} // This controls the selected option
-							>
-								<option value="cup">cup</option>
-								<option value="tsp">tsp</option>
-								<option value="Tbsp">Tbsp</option>
-							</select>
-						);
-	
-					default:
-						return null;
-				}	
-		
-			case UnitSystem.DEFAULT:
-				return null;
-		
-			default:
-				return null;
-	}
+		const currentLanguage = window.recipeEditorData?.currentLanguage || 'en';
+		return translations[currentLanguage]?.[text] || text;
 	};
-
+	
 	const addRecipeIngredient = () => {
+		const renderUnitTypeChoice = () => {
+			const handleUnitTypeChange = (e) => {
+				const newUnitType = e.target.value;
+				const { unitSystem } = props.attributes;
+				
+				// Get the first available unit choice for the new unit type
+				const newUnitChoice = unitOptions[unitSystem]?.[newUnitType]?.[0] || '';
+			
+				props.setAttributes({
+					ingredientUnitType: newUnitType,
+					ingredientUnitChoice: newUnitChoice, // Set default unit choice
+				});
+			};
+			
+			return (
+				<select
+					onChange={handleUnitTypeChange}
+					name="Unit Type"
+					value={props.attributes.ingredientUnitType}
+					id="recipe-input-unit-type"
+					className='recipe-input-unit-type'
+					>
+					<option
+						className='recipe-input-unit-type-option'
+						value=""
+					>No unit</option>
+
+					<option
+						className='recipe-input-unit-type-option'
+						value={UnitType.MASS}
+						//selected={props.attributes.ingredientUnitType == UnitType.MASS}
+					>⚖️ Mass</option>
+
+					<option 
+						className='recipe-input-unit-type-option' 
+						value={UnitType.VOLUME}
+						//selected={props.attributes.ingredientUnitType == UnitType.VOLUME}
+					>💧 Volume</option>
+
+					<option 
+						className='recipe-input-unit-type-option' 
+						value={UnitType.TOOL}
+						//selected={props.attributes.ingredientUnitType == UnitType.TOOL}
+					>🥄 Tool</option>
+				</select>
+			)
+		};
+
+		const handleQuantityChange = (e) => {
+			props.setAttributes({ingredientQuantity: e.target.value});
+		};
+
+		const renderUnitChoice = () => {
+			const { unitSystem = UnitSystem.DEFAULT, ingredientUnitType } = props.attributes;
+
+			// Return the appropriate select element based on the unit system and unit type
+			const options = unitOptions[unitSystem]?.[ingredientUnitType];
+	
+			const renderUnitChoiceSelect = (options) => {
+				const handleUnitChoiceChange = (e) => {
+					props.setAttributes({ingredientUnitChoice: e.target.value});
+				}
+
+				return (
+					<select 
+						onChange={handleUnitChoiceChange} 
+						name="Unit Choice" 
+						id="recipe-input-unit-choice" 
+						className="recipe-input-unit-choice"
+						value={props.attributes.ingredientUnitChoice} // This controls the selected option
+					>
+						{options.map((option, index) => (
+							  <option key={index} value={option}>
+								{getTranslation(option)}
+							</option> // Translate option values
+						))}
+					</select>
+				);
+			};	
+	
+			return options ? renderUnitChoiceSelect(options) : null;
+		};
+
+		const handleNameChange = (e) => {
+			props.setAttributes({ingredientName: e.target.value});
+		}
+
 		return (		
 			<div className="ingredient-inputs-container">
 				<div className="ingredient-inputs-controllers">
-					
-					<select 
-						onChange={handleUnitTypeChange} 
-						name="Unit Type" 
-						id="recipe-input-unit-type" 
-						className='recipe-input-unit-type' 
-					>
-						<option 
-							className='recipe-input-unit-type-option' 
-							value="" 
-							selected={props.attributes.ingredientUnitType}
-						>No unit</option>
-						<option 
-							className='recipe-input-unit-type-option'
-							value={UnitType.MASS}
-							selected={props.attributes.ingredientUnitType == UnitType.MASS}
-						>Mass</option>
-						<option 
-							className='recipe-input-unit-type-option' 
-							value={UnitType.VOLUME}
-							selected={props.attributes.ingredientUnitType == UnitType.VOLUME}
-						>
-							Volume
-						</option>
-						<option 
-							className='recipe-input-unit-type-option' 
-							value={UnitType.TOOL}
-							selected={props.attributes.ingredientUnitType == UnitType.TOOL}
-						>Tool</option>
-					</select>
+					{renderUnitTypeChoice()}
 				</div>
 
 				<input 
 					onChange={handleQuantityChange} 
 					className='recipe-input-quantity' 
 					type="text" 
-					placeholder='How much?' 
+					placeholder='How much?'
 					value={props.attributes['ingredientQuantity']} 
 				/>
 	
@@ -249,14 +244,6 @@ export default function Edit(props) {
 				/>
 			</div>
 		)
-	}
-
-	const handleUnitChoiceChange = (e) => {
-		props.setAttributes({ingredientUnitChoice: e.target.value});
-	}
-
-	const handleNameChange = (e) => {
-		props.setAttributes({ingredientName: e.target.value});
 	}
 
 	return (

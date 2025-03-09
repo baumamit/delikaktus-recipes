@@ -11,7 +11,7 @@
 		<div>
 			<span class="recipe-ingredient-quantity"><?php echo esc_html( $attributes['ingredientQuantity'] ); ?></span>
 			<span class="recipe-ingredient-unit-choice">
-				<?php echo ( !$attributes['unitSystem'] || $attributes['unitSystem'] == 'text' ? '' : esc_html( $attributes['ingredientUnitChoice'] ) ); ?>
+				<?php echo ( $attributes['ingredientUnitChoice'] ); ?>
 			</span>
 			<span class="recipe-input-ingredient-name"><?php echo esc_html( $attributes['ingredientName'] ); ?></span>
 		</div>

@@ -31,5 +31,4 @@ registerBlockType( metadata.name, {
 	 */
 	icon: LuCookingPot,
 	edit: Edit,
-	save: () => null,
 } );
