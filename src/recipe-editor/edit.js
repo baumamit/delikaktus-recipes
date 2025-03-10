@@ -2,6 +2,7 @@ import { useState } from '@wordpress/element';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 // Import block toolbar icons
 import { TbCircleLetterMFilled ,TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
+import { MdAddToPhotos, MdDelete } from "react-icons/md";
 
 /**
  * Retrieves the translation of text.
@@ -145,7 +146,7 @@ export default function Edit(props) {
 					ingredientUnitChoice: newUnitChoice, // Set default unit choice
 				});
 			};
-			
+
 			return (
 				<select
 					onChange={handleUnitTypeChange}
@@ -183,6 +184,89 @@ export default function Edit(props) {
 		const handleQuantityChange = (e) => {
 			props.setAttributes({ingredientQuantity: e.target.value});
 		};
+
+		const renderQuantityFractionChange = () => {
+			const handleQuantityFractionChange = (e) => {
+				props.setAttributes({ingredientQuantityFraction: e.target.value});
+			}
+
+			return (
+				<select 
+					onChange={handleQuantityFractionChange} 
+					name="Quantity Fraction" 
+					id="recipe-input-quantity-fraction"  //https://lights0123.com/fractions/
+					className="recipe-input-quantity-fraction"
+					value={props.attributes.ingredientQuantityFraction} // This controls the selected option
+				>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value=""
+					></option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="½"
+					>½</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅓"
+					>⅓</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="¼"
+					>¼</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅕"
+					>⅕</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅙"
+					>⅙</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅛"
+					>⅛</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅔"
+					>⅔</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅖"
+					>⅖</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅜"
+					>⅜</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="¾"
+					>¾</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅝"
+					>⅝</option>
+
+					<option
+						className='recipe-input-quantity-fraction-option'
+						value="⅞"
+					>⅞</option>
+				</select>
+			);
+		};	
+
 
 		const renderUnitChoice = () => {
 			const { unitSystem = UnitSystem.DEFAULT, ingredientUnitType } = props.attributes;
@@ -222,8 +306,24 @@ export default function Edit(props) {
 		return (		
 			<div className="ingredient-inputs-container">
 				<div className="ingredient-inputs-controllers">
-					{renderUnitTypeChoice()}
+					<button
+						onClick={()=>{}}
+						id='recipe-ingredient-delete'
+						className='recipe-ingredient-delete'
+					>
+						<MdDelete />
+					</button>
+					
+					<button
+						onClick={()=>{}}
+						id='recipe-ingredient-create'
+						className='recipe-ingredient-create'
+					>
+						<MdAddToPhotos />
+					</button>
 				</div>
+
+				{renderUnitTypeChoice()}
 
 				<input 
 					onChange={handleQuantityChange} 
@@ -232,7 +332,9 @@ export default function Edit(props) {
 					placeholder='How much?'
 					value={props.attributes['ingredientQuantity']} 
 				/>
-	
+
+				{renderQuantityFractionChange()}
+
 				{renderUnitChoice()}
 	
 				<input 
@@ -269,7 +371,7 @@ export default function Edit(props) {
 					style={{ all: 'inherit', border: 'none', outline: 'none', background: 'transparent', width: '100%' }}
 				/>
 			</div>
-	
+
 			{addRecipeIngredient()}
 			
 		</div>

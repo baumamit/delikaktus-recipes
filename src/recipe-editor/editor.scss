@@ -5,11 +5,13 @@
  */
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor {
-	border: 3px dotted #f00;
-	align-items: center; /* Vertically center the elements */
+	border: 3px dashed orange;
+	border-radius: 1rem;
+	margin: 0;
+	padding: 0.5em;
 }
 
-h2.wp-block-heading, 
+/* .editor-styles-wrapper .wp-block-create-block-recipe-editor h2.wp-block-heading, 
 .wp-block-heading input {
 	font-size: inherit; // Inherit the theme's h2 font size
 	font-weight: inherit; // Inherit weight
@@ -22,12 +24,46 @@ h2.wp-block-heading,
 	margin: 0; // Optional, removes default margin
 	width: 100%; // Optional, ensures consistent width
 	display: inline-block; // Aligns inline like h2
-}
+} */
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers {
-	display: block;
-	flex-wrap: wrap;  /* Allows wrapping if space is limited */
-	margin-bottom: 0.5rem;        /* Adds spacing between the inputs */
+	padding-top: 0.2em;
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button {
+	display: none;
+	border: none;
+	color: inherit;
+	justify-content: center; /* Horizontally center the elements */
+	border-radius: 0.1em;
+	margin-inline: 0.2em;
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container:hover .ingredient-inputs-controllers button {
+	display: inline-flex;
+	flex-wrap: nowrap;  /* Allows wrapping if space is limited */
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button > * {
+	font-size: 2.2rem;
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-create {
+	background-color: rgb(209, 251, 209);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-create:hover {
+	background-color: rgb(54, 226, 54);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-create:active {
+	background-color: rgb(229, 255, 229);
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-delete {
+	background-color: rgb(255, 209, 209);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-delete:hover {
+	background-color: rgb(255, 71, 71);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-delete:active {
+	background-color: rgb(253, 238, 238);
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-system {
@@ -40,23 +76,33 @@ h2.wp-block-heading,
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container {
 	display: flex;
 	flex-wrap: wrap;  /* Allows wrapping if space is limited */
-	gap: 0.5rem;        /* Adds spacing between the inputs */
+	gap: 0.3rem;        /* Adds spacing between the inputs */
 	align-items: center; /* Vertically center the elements */
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity,
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-type,
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity-fraction,
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-choice {
-	width: 4rem;      /* Let the width adjust based on content */
-	padding: 0.2rem 0.5rem;
+	min-width: 2.5rem;  /* Minimum width to prevent collapsing */
+	width: auto;      /* Let the width adjust based on content */
+	padding: 0.1rem 1rem 0.1rem 0.1rem ;
 	/* flex: 1; */          /* Ensures elements grow if there's space */
+	font-size: 1.1rem; // Inherit the theme's font size
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity {
+	width: 2.5rem;      /* Let the width adjust based on content */
+	padding: 0.1rem;
+	/* flex: 1; */          /* Ensures elements grow if there's space */
+	font-size: 1.1rem; // Inherit the theme's font size
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-ingredient-name {
-	min-width: 10rem;  /* Minimum width to prevent collapsing */
-	width: auto;      /* Let the width adjust based on content */
-	padding: 0.2rem 0.5rem;
+	min-width: 2rem;  /* Minimum width to prevent collapsing */
+	padding: 0.1rem;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 	flex: 1;          /* Ensures elements grow if there's space */
+	font-size: 1.1rem; // Inherit the theme's font size
 }

@@ -11,22 +11,14 @@
 	padding: 2px;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-ingredient {
+.wp-block-create-block-recipe-editor .recipe-ingredient {
 	display: flex;
 	flex-wrap: wrap;  /* Allows wrapping if space is limited */
-	gap: 1rem;        /* Adds spacing between the inputs */
+	/* gap: 0rem; */        /* Adds spacing between the inputs */
 	align-items: center; /* Vertically center the elements */
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor 
-:is(.recipe-ingredient-quantity, .recipe-ingredient-unit-choice) {
-	width: 5rem;      /* Let the width adjust based on content */
-	padding: 0.1rem 0.2rem;
-	margin-right: 2rem;        /* Adds spacing between the inputs */
-	/* flex: 1; */          /* Ensures elements grow if there's space */
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-ingredient-name {
-	display: flex;
-	flex-wrap: wrap;  /* Allows wrapping if space is limited */
-	align-items: center; /* Vertically center the elements */
+.wp-block-create-block-recipe-editor 
+:is(.recipe-ingredient-quantity-fraction, .recipe-ingredient-unit-choice) {
+	margin-right: 1rem;        /* Adds spacing between the inputs */
 }
