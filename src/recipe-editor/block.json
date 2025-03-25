@@ -6,13 +6,22 @@
 	"title": "Recipe Editor",
 	"category": "widgets",
 	"attributes": {
-		"blockHeading": {"type": "string", "default": "Ingredients"},
-		"unitSystem": {"type": "string", "default": "metric"},
-		"ingredientUnitType": {"type": "string", "default": ""},
-		"ingredientQuantity": {"type": "string", "default": ""},
-		"ingredientQuantityFraction": {"type": "string", "default": ""},
-		"ingredientUnitChoice": {"type": "string", "default": ""},
-		"ingredientName": {"type": "string", "default": ""}
+		"blockHeading": { "type": "string", "default": "Ingredients" },
+		"unitSystem": { "type": "string", "default": "metric" },
+		"ingredients": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"unitType": { "type": "string", "default": "" },
+					"quantity": { "type": "string", "default": "" },
+					"quantityFraction": { "type": "string", "default": "" },
+					"unitChoice": { "type": "string", "default": "" },
+					"name": { "type": "string", "default": "" }
+				}
+			}
+		}
 	},
 	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},

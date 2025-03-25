@@ -2,7 +2,8 @@ import { useState } from '@wordpress/element';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 // Import block toolbar icons
 import { TbCircleLetterMFilled ,TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
-import { MdAddToPhotos, MdDelete } from "react-icons/md";
+// Import add/delete icons
+import { MdAddToPhotos, MdDelete, MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
 
 /**
  * Retrieves the translation of text.
@@ -36,21 +37,21 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 
-// Enum-like object to represent modes
+// Enum-like object to represent unit system modes
 const UnitSystem = {
 	DEFAULT: 'default',
 	METRIC: 'metric',
 	IMPERIAL: 'imperial',
 };
 
-// Enum-like object to represent modes
+// Enum-like object to represent the type of units for each ingredient
 const UnitType = {
 	MASS: 'mass',
 	VOLUME: 'volume',
 	TOOL: 'tool',
 };
 
-//Object of unit choices matching every unit system and unit type
+// Unit options based on unit system and type
 const unitOptions = {
 	[UnitSystem.METRIC]: {
 		[UnitType.MASS]: ['g', 'kg'],
@@ -62,55 +63,12 @@ const unitOptions = {
 		[UnitType.VOLUME]: ['pint', 'qt'],
 		[UnitType.TOOL]: ['cup', 'tsp', 'Tbsp'],
 	},
-	[UnitSystem.DEFAULT]: {} //null,
+	[UnitSystem.DEFAULT]: {},
 };
 
-export default function Edit(props) {
-	const { attributes, setAttributes } = props;
-	const { unitSystem } = attributes; // Get unitSystem from block attributes
-  
-	// Function to cycle through the modes
-	const toggleUnitSystem = () => {
-		const nextUnitSystem = {
-		[UnitSystem.DEFAULT]: UnitSystem.METRIC,
-		[UnitSystem.METRIC]: UnitSystem.IMPERIAL,
-		[UnitSystem.IMPERIAL]: UnitSystem.DEFAULT,
-		};
-
-		const newUnitSystem = nextUnitSystem[unitSystem];
-		let newUnitType = props.attributes.ingredientUnitType;
-		// If the current unit type is not valid in the new unit system, reset it
-		if (!unitOptions[newUnitSystem]?.[newUnitType]) {
-			newUnitType = Object.keys(unitOptions[newUnitSystem] || {})[0] || '';
-		}
-		const newUnitChoice = unitOptions[newUnitSystem]?.[newUnitType]?.[0] || '';
-
-		setAttributes({ 
-			unitSystem: newUnitSystem, 
-			ingredientUnitType: newUnitType, 
-			ingredientUnitChoice: newUnitChoice//unitOptions[newUnitSystem][newUnitType] || ''
-		}); // Save to block attributes
-	};
-
-	// Choose the appropriate icon based on the current mode
-	const getUnitSystemIcon = () => {
-		switch (unitSystem) {
-		case UnitSystem.METRIC:
-			return <TbCircleLetterMFilled />;
-		case UnitSystem.IMPERIAL:
-			return <TbCircleLetterIFilled />;
-		default:
-			return <TbCircleDotFilled />;
-		}
-	};
-
-	const handleHeadingChange = (e) => {
-		props.setAttributes({ blockHeading: e.target.value });
-	};
-
-	// Function to translate terms based on current language
-	const getTranslation = (text) => {
-		const translations = {
+// Function to translate terms based on current language
+const getTranslation = (text) => {
+	const translations = {
 		en: {
 			cup: 'cup',
 			tsp: 'tsp',
@@ -126,254 +84,239 @@ export default function Edit(props) {
 			tsp: 'כפית',
 			Tbsp: 'כף'
 		},
-		};
-
-		const currentLanguage = window.recipeEditorData?.currentLanguage || 'en';
-		return translations[currentLanguage]?.[text] || text;
 	};
-	
-	const addRecipeIngredient = () => {
-		const renderUnitTypeChoice = () => {
-			const handleUnitTypeChange = (e) => {
-				const newUnitType = e.target.value;
-				const { unitSystem } = props.attributes;
-				
-				// Get the first available unit choice for the new unit type
-				const newUnitChoice = unitOptions[unitSystem]?.[newUnitType]?.[0] || '';
-			
-				props.setAttributes({
-					ingredientUnitType: newUnitType,
-					ingredientUnitChoice: newUnitChoice, // Set default unit choice
-				});
-			};
 
-			return (
-				<select
-					onChange={handleUnitTypeChange}
-					name="Unit Type"
-					value={props.attributes.ingredientUnitType}
-					id="recipe-input-unit-type"
-					className='recipe-input-unit-type'
-					>
-					<option
-						className='recipe-input-unit-type-option'
-						value=""
-					>No unit</option>
+	// Function that returns the current language code or english as default
+	const currentLanguage = window.recipeEditorData?.currentLanguage || 'en';
+	return translations[currentLanguage]?.[text] || text;
+};
 
-					<option
-						className='recipe-input-unit-type-option'
-						value={UnitType.MASS}
-						//selected={props.attributes.ingredientUnitType == UnitType.MASS}
-					>⚖️ Mass</option>
+export default function Edit(props) {
+	const { attributes, setAttributes } = props;
+	const { unitSystem, blockHeading, ingredients } = attributes;
 
-					<option 
-						className='recipe-input-unit-type-option' 
-						value={UnitType.VOLUME}
-						//selected={props.attributes.ingredientUnitType == UnitType.VOLUME}
-					>💧 Volume</option>
-
-					<option 
-						className='recipe-input-unit-type-option' 
-						value={UnitType.TOOL}
-						//selected={props.attributes.ingredientUnitType == UnitType.TOOL}
-					>🥄 Tool</option>
-				</select>
-			)
+	// Function to toggle between unit systems
+	const toggleUnitSystem = () => {
+		const nextUnitSystem = {
+			[UnitSystem.DEFAULT]: UnitSystem.METRIC,
+			[UnitSystem.METRIC]: UnitSystem.IMPERIAL,
+			[UnitSystem.IMPERIAL]: UnitSystem.DEFAULT,
 		};
 
-		const handleQuantityChange = (e) => {
-			props.setAttributes({ingredientQuantity: e.target.value});
-		};
+		const newUnitSystem = nextUnitSystem[unitSystem];
+		setAttributes({ unitSystem: newUnitSystem });
+	};
 
-		const renderQuantityFractionChange = () => {
-			const handleQuantityFractionChange = (e) => {
-				props.setAttributes({ingredientQuantityFraction: e.target.value});
-			}
-
-			return (
-				<select 
-					onChange={handleQuantityFractionChange} 
-					name="Quantity Fraction" 
-					id="recipe-input-quantity-fraction"  //https://lights0123.com/fractions/
-					className="recipe-input-quantity-fraction"
-					value={props.attributes.ingredientQuantityFraction} // This controls the selected option
-				>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value=""
-					></option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="½"
-					>½</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅓"
-					>⅓</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="¼"
-					>¼</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅕"
-					>⅕</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅙"
-					>⅙</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅛"
-					>⅛</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅔"
-					>⅔</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅖"
-					>⅖</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅜"
-					>⅜</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="¾"
-					>¾</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅝"
-					>⅝</option>
-
-					<option
-						className='recipe-input-quantity-fraction-option'
-						value="⅞"
-					>⅞</option>
-				</select>
-			);
-		};	
-
-
-		const renderUnitChoice = () => {
-			const { unitSystem = UnitSystem.DEFAULT, ingredientUnitType } = props.attributes;
-
-			// Return the appropriate select element based on the unit system and unit type
-			const options = unitOptions[unitSystem]?.[ingredientUnitType];
-	
-			const renderUnitChoiceSelect = (options) => {
-				const handleUnitChoiceChange = (e) => {
-					props.setAttributes({ingredientUnitChoice: e.target.value});
-				}
-
-				return (
-					<select 
-						onChange={handleUnitChoiceChange} 
-						name="Unit Choice" 
-						id="recipe-input-unit-choice" 
-						className="recipe-input-unit-choice"
-						value={props.attributes.ingredientUnitChoice} // This controls the selected option
-					>
-						{options.map((option, index) => (
-							  <option key={index} value={option}>
-								{getTranslation(option)}
-							</option> // Translate option values
-						))}
-					</select>
-				);
-			};	
-	
-			return options ? renderUnitChoiceSelect(options) : null;
-		};
-
-		const handleNameChange = (e) => {
-			props.setAttributes({ingredientName: e.target.value});
+	// Choose the appropriate icon based on the current mode
+	const getUnitSystemIcon = () => {
+		switch (unitSystem) {
+		case UnitSystem.METRIC:
+			return <TbCircleLetterMFilled />;
+		case UnitSystem.IMPERIAL:
+			return <TbCircleLetterIFilled />;
+		default:
+			return <TbCircleDotFilled />;
 		}
+	};
 
-		return (		
-			<div className="ingredient-inputs-container">
-				<div className="ingredient-inputs-controllers">
-					<button
-						onClick={()=>{}}
-						id='recipe-ingredient-delete'
-						className='recipe-ingredient-delete'
-					>
-						<MdDelete />
-					</button>
-					
-					<button
-						onClick={()=>{}}
-						id='recipe-ingredient-create'
-						className='recipe-ingredient-create'
-					>
-						<MdAddToPhotos />
-					</button>
-				</div>
+	const handleHeadingChange = (e) => {
+		setAttributes({ blockHeading: e.target.value });
+	};
 
-				{renderUnitTypeChoice()}
+	// Handle ingredient changes
+	const handleIngredientChange = (index, key, value) => {
+		const newIngredients = [...ingredients];
+		newIngredients[index] = { ...newIngredients[index], [key]: value };
+		setAttributes({ ingredients: newIngredients });
+	};
 
-				<input 
-					onChange={handleQuantityChange} 
-					className='recipe-input-quantity' 
-					type="text" 
-					placeholder='How much?'
-					value={props.attributes['ingredientQuantity']} 
-				/>
+	// Handle adding a new ingredient
+	const addIngredient = () => {
+		setAttributes({
+			ingredients: [
+				...ingredients,
+				{
+					unitType: '',
+					quantity: '',
+					quantityFraction: '',
+					unitChoice: '',
+					name: ''
+				}
+			]
+		});
+	};
 
-				{renderQuantityFractionChange()}
+	// Handle deleting an ingredient
+	const deleteIngredient = (index) => {
+		const newIngredients = ingredients.filter((_, i) => i !== index);
+		setAttributes({ ingredients: newIngredients });
+	};
 
-				{renderUnitChoice()}
+	// Handle unit type change
+	const handleUnitTypeChange = (index, e) => {
+		const newUnitType = e.target.value || UnitType.MASS; // Default to mass if empty
+		const newUnitChoice = (unitOptions[unitSystem]?.[newUnitType] || [])[0] || ''; 
 	
-				<input 
-					onChange={handleNameChange} 
-					className='recipe-input-ingredient-name' 
-					type="text" 
-					placeholder='Ingredient name...' 
-					value={props.attributes['ingredientName']} 
-				/>
-			</div>
-		)
-	}
+		console.log("Before Update:", ingredients[index]);
+	
+		// Update the attributes in one go
+		setAttributes({
+			ingredients: ingredients.map((ingredient, i) =>
+				i === index ? { ...ingredient, unitType: newUnitType, unitChoice: newUnitChoice } : ingredient
+			),
+		});
+	
+		console.log("After Update:", { ...ingredients[index], unitType: newUnitType, unitChoice: newUnitChoice });
+	};
 
+	// Handle quantity change
+	const handleQuantityChange = (index, e) => {
+		handleIngredientChange(index, 'quantity', e.target.value);
+	};
+
+	// Handle quantity fraction change
+	const handleQuantityFractionChange = (index, e) => {
+		handleIngredientChange(index, 'quantityFraction', e.target.value);
+	};
+
+	// Handle ingredient name change
+	const handleNameChange = (index, e) => {
+		handleIngredientChange(index, 'name', e.target.value);
+	};
+
+	// Render ingredient input fields
 	return (
 		<div { ...useBlockProps() }>
 			<BlockControls>
 				<ToolbarGroup>
-				<ToolbarButton
-					icon={getUnitSystemIcon()} // Dynamically render the icon based on the current mode
-					label={__(unitSystem.charAt(0).toUpperCase() + unitSystem.slice(1) + ' Units', 'recipe-editor')}
-					onClick={toggleUnitSystem}
-					isPressed={false} // No need to track the pressed state in this case
-				/>
+					<ToolbarButton
+						icon={getUnitSystemIcon()}
+						label={getTranslation(unitSystem.charAt(0).toUpperCase() + unitSystem.slice(1) + ' Units')}
+						onClick={toggleUnitSystem}
+						isPressed={false}
+					/>
 				</ToolbarGroup>
 			</BlockControls>
 
-			<div>
+			<h2>
 				<input
-					className="wp-block-heading"
+					className="wp-block-heading "
 					type="text"
-					value={props.attributes.blockHeading}
+					value={blockHeading}
 					onChange={handleHeadingChange}
-					placeholder={__('Enter heading...', 'recipe-editor')}
+					placeholder={getTranslation('Enter heading...')}
 					style={{ all: 'inherit', border: 'none', outline: 'none', background: 'transparent', width: '100%' }}
 				/>
-			</div>
+			</h2>
 
-			{addRecipeIngredient()}
-			
+			<div className="ingredient-inputs-container">
+				{/* Render each ingredient */}
+				{ingredients.map((ingredient, index) => (
+					<div key={index} className="ingredient-input">
+						<div className="ingredient-controllers">
+							<button
+								onClick={() => deleteIngredient(index)}
+								className='recipe-ingredient-delete'
+							>
+								<MdDelete />
+							</button>
+
+							<div className='recipe-ingredient-arrows'>
+								{/* Button to move ingredient up in the list */}
+								<button
+									onClick={() => {}}
+									className='recipe-ingredient-arrow-up'
+								>
+									<MdArrowDropUp />
+								</button>
+								{/* Button to move ingredient up in the list */}
+								<button
+									onClick={() => {}}
+									className='recipe-ingredient-arrow-down'
+								>
+									<MdArrowDropDown />
+								</button>
+							</div>
+
+						</div>
+
+						{/* Unit Type */}
+						<select
+							onChange={(e) => handleUnitTypeChange(index, e)}
+							name="Unit Type"
+							value={ingredient.unitType}
+							className='recipe-input-unit-type'
+						>
+							<option value="">No unit</option>
+							<option value={UnitType.MASS}>⚖️ {getTranslation('Mass')}</option>
+							<option value={UnitType.VOLUME}>💧 {getTranslation('Volume')}</option>
+							<option value={UnitType.TOOL}>🥄 {getTranslation('Tool')}</option>
+						</select>
+
+						{/* Quantity */}
+						<input 
+							onChange={(e) => handleQuantityChange(index, e)} 
+							className='recipe-input-quantity' 
+							type="text" 
+							placeholder={getTranslation('How much?')}
+							value={ingredient.quantity} 
+						/>
+
+						{/* Quantity Fraction */}
+						<select 
+							onChange={(e) => handleQuantityFractionChange(index, e)} 
+							name="Quantity Fraction" 
+							className="recipe-input-quantity-fraction"
+							value={ingredient.quantityFraction}
+						>
+							<option value=""></option>
+							<option value="½">½</option>
+							<option value="⅓">⅓</option>
+							<option value="¼">¼</option>
+							<option value="⅕">⅕</option>
+							<option value="⅙">⅙</option>
+							<option value="⅛">⅛</option>
+							<option value="⅔">⅔</option>
+							<option value="⅖">⅖</option>
+							<option value="⅜">⅜</option>
+							<option value="¾">¾</option>
+							<option value="⅝">⅝</option>
+							<option value="⅞">⅞</option>
+						</select>
+
+						{/* Unit Choice */}
+						<select 
+							onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)} 
+							name="Unit Choice" 
+							className="recipe-input-unit-choice"
+							value={ingredient.unitChoice}
+						>
+							<option value="" disabled>{getTranslation('Select a unit')}</option>
+							{(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
+								<option key={i} value={option}>{getTranslation(option)}</option>
+							))}
+						</select>
+
+						{/* Ingredient Name */}
+						<input 
+							onChange={(e) => handleNameChange(index, e)} 
+							className='recipe-input-ingredient-name' 
+							type="text" 
+							placeholder={getTranslation('Ingredient name...')} 
+							value={ingredient.name} 
+						/>
+					</div>
+				))}
+
+				{/* Button to add a new ingredient */}
+				<button
+					onClick={addIngredient}
+					className='recipe-ingredient-create'
+				>
+					<MdAddToPhotos />
+				</button>
+
+			</div>
 		</div>
 	);
 }

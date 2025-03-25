@@ -1,68 +1,71 @@
 /**
  * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
  */
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor {
-	border: 3px dashed orange;
-	border-radius: 1rem;
+	border: 4px dashed orange;
+	border-radius: 0.6rem;
 	margin: 0;
-	padding: 0.5em;
+	padding: 0;
 }
 
-/* .editor-styles-wrapper .wp-block-create-block-recipe-editor h2.wp-block-heading, 
-.wp-block-heading input {
-	font-size: inherit; // Inherit the theme's h2 font size
-	font-weight: inherit; // Inherit weight
-	line-height: inherit; // Inherit line height
-	color: inherit; // Inherit text color
-	border: none; // Optional, removes borders
-	background: transparent; // Optional, no background
-	outline: none; // Optional, removes outline on focus
-	padding: 0; // Optional, removes default padding
-	margin: 0; // Optional, removes default margin
-	width: 100%; // Optional, ensures consistent width
-	display: inline-block; // Aligns inline like h2
-} */
-
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers {
-	padding-top: 0.2em;
-}
-
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button {
-	display: none;
-	border: none;
-	color: inherit;
-	justify-content: center; /* Horizontally center the elements */
-	border-radius: 0.1em;
-	margin-inline: 0.2em;
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container:hover .ingredient-inputs-controllers button {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers {
 	display: inline-flex;
 	flex-wrap: nowrap;  /* Allows wrapping if space is limited */
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button > * {
-	font-size: 2.2rem;
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button {
+	border: none;
+	color: inherit;
+	border-radius: 0.2em;
+	margin-right: 0.3rem;
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers .recipe-ingredient-arrows>* {
+	font-size: 1.2rem;
+	background-color: rgb(239, 209, 255);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers .recipe-ingredient-arrows>*:hover {
+	font-size: 1.2rem;
+	background-color: rgb(184, 52, 254);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers .recipe-ingredient-arrows>*:active {
+	font-size: 1.2rem;
+	background-color: rgb(201, 102, 255);
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-create {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete>* {
+	font-size: 1.6rem;
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container .ingredient-controllers .recipe-ingredient-arrows {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete {
+	font-size: inherit;
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-create {
+	font-size: inherit;
+	display: flex;
+	flex-wrap: wrap;
 	background-color: rgb(209, 251, 209);
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-create:hover {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-create:hover {
 	background-color: rgb(54, 226, 54);
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-create:active {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-create:active {
 	background-color: rgb(229, 255, 229);
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-delete {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete {
 	background-color: rgb(255, 209, 209);
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-delete:hover {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete:hover {
 	background-color: rgb(255, 71, 71);
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-controllers button.recipe-ingredient-delete:active {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete:active {
 	background-color: rgb(253, 238, 238);
 }
 
@@ -80,21 +83,21 @@
 	align-items: center; /* Vertically center the elements */
 }
 
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container>* {
+	font-size: 1.1rem;
+}
+
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-type,
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity-fraction,
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-choice {
 	min-width: 2.5rem;  /* Minimum width to prevent collapsing */
 	width: auto;      /* Let the width adjust based on content */
 	padding: 0.1rem 1rem 0.1rem 0.1rem ;
-	/* flex: 1; */          /* Ensures elements grow if there's space */
-	font-size: 1.1rem; // Inherit the theme's font size
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity {
 	width: 2.5rem;      /* Let the width adjust based on content */
 	padding: 0.1rem;
-	/* flex: 1; */          /* Ensures elements grow if there's space */
-	font-size: 1.1rem; // Inherit the theme's font size
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-ingredient-name {
@@ -104,5 +107,4 @@
 	white-space: nowrap;
 	overflow: hidden;
 	flex: 1;          /* Ensures elements grow if there's space */
-	font-size: 1.1rem; // Inherit the theme's font size
 }
