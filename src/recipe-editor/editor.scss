@@ -1,12 +1,19 @@
 /**
  * The following styles get applied inside the editor only.
  */
+ .editor-styles-wrapper .wp-block-create-block-recipe-editor * {
+	margin: 0;
+	padding: 0;
+}
+
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor {
 	border: 4px dashed orange;
 	border-radius: 0.6rem;
 	margin: 0;
 	padding: 0;
+	display: flex;
+    flex-direction: column;
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers {
@@ -46,16 +53,18 @@
 	font-size: inherit;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-create {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add {
 	font-size: inherit;
-	display: flex;
-	flex-wrap: wrap;
+	align-self: center; /* Moves the button to the right */
+	margin-top: 0.5rem;
+	position:relative;
+	right: 0;
 	background-color: rgb(209, 251, 209);
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-create:hover {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add:hover {
 	background-color: rgb(54, 226, 54);
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-create:active {
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add:active {
 	background-color: rgb(229, 255, 229);
 }
 

@@ -1,10 +1,11 @@
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 // Import block toolbar icons
 import { TbCircleLetterMFilled ,TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
 // Import add/delete icons
-import { MdAddToPhotos, MdDelete, MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
-
+import { MdAddToPhotos as IconAdd, MdDelete as IconDelete } from "react-icons/md";
+// Import add/delete icons
+import { IoIosArrowUp as IconArrowUp, IoIosArrowDown as IconArrowDown } from "react-icons/io";
 /**
  * Retrieves the translation of text.
  *
@@ -152,21 +153,49 @@ export default function Edit(props) {
 		setAttributes({ ingredients: newIngredients });
 	};
 
+	// Handle adding a new ingredient
+	const moveIngredientUp = (index) => {
+		if (index>0) { 
+			const indexIngredient = ingredients.filter((_, i) => i === index);
+			const initialIngredients = ingredients.filter((_, i) => i < index-1 );
+			const lastIngredients = ingredients.filter((_, i) => (i === index-1) || (i > index));
+			setAttributes({
+				ingredients: [
+					...initialIngredients,
+					...indexIngredient,
+					...lastIngredients
+				]
+			});
+		};
+	};
+
+	// Handle adding a new ingredient
+	const moveIngredientDown = (index) => {	
+		if (index<ingredients.length-1) { 
+			const indexIngredient = ingredients.filter((_, i) => i === index);
+			const initialIngredients = ingredients.filter((_, i) => (i < index) || (i === index+1));
+			const lastIngredients = ingredients.filter((_, i) => i > index+1 );
+			setAttributes({
+				ingredients: [
+					...initialIngredients,
+					...indexIngredient,
+					...lastIngredients
+				]
+			});
+		};
+	};
+
 	// Handle unit type change
 	const handleUnitTypeChange = (index, e) => {
 		const newUnitType = e.target.value || UnitType.MASS; // Default to mass if empty
 		const newUnitChoice = (unitOptions[unitSystem]?.[newUnitType] || [])[0] || ''; 
-	
-		console.log("Before Update:", ingredients[index]);
-	
+		
 		// Update the attributes in one go
 		setAttributes({
 			ingredients: ingredients.map((ingredient, i) =>
 				i === index ? { ...ingredient, unitType: newUnitType, unitChoice: newUnitChoice } : ingredient
 			),
 		});
-	
-		console.log("After Update:", { ...ingredients[index], unitType: newUnitType, unitChoice: newUnitChoice });
 	};
 
 	// Handle quantity change
@@ -218,23 +247,23 @@ export default function Edit(props) {
 								onClick={() => deleteIngredient(index)}
 								className='recipe-ingredient-delete'
 							>
-								<MdDelete />
+								<IconDelete />
 							</button>
 
 							<div className='recipe-ingredient-arrows'>
 								{/* Button to move ingredient up in the list */}
 								<button
-									onClick={() => {}}
+									onClick={() => moveIngredientUp(index)}
 									className='recipe-ingredient-arrow-up'
 								>
-									<MdArrowDropUp />
+									<IconArrowUp />
 								</button>
 								{/* Button to move ingredient up in the list */}
 								<button
-									onClick={() => {}}
+									onClick={() => moveIngredientDown(index)}
 									className='recipe-ingredient-arrow-down'
 								>
-									<MdArrowDropDown />
+									<IconArrowDown />
 								</button>
 							</div>
 
@@ -308,15 +337,16 @@ export default function Edit(props) {
 					</div>
 				))}
 
-				{/* Button to add a new ingredient */}
-				<button
-					onClick={addIngredient}
-					className='recipe-ingredient-create'
-				>
-					<MdAddToPhotos />
-				</button>
-
 			</div>
+
+			{/* Button to add a new ingredient */}
+			<button
+				onClick={addIngredient}
+				className='recipe-ingredient-add'
+			>
+				<IconAdd />
+			</button>
+
 		</div>
 	);
 }

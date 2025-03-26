@@ -6,19 +6,60 @@
  */
 
 .wp-block-create-block-recipe-editor {
-	background-color: inherit;
-	color: inherit;
-	padding: 2px;
+	color: var(--wp--preset--color--text);
+	margin: inherit;
+	padding: inherit;
+}
+.wp-block-create-block-recipe-editor * {
+	padding: 0;
+	margin: 0;
+}
+
+.wp-block-create-block-recipe-editor h2 {
+	margin: 0.5rem 0;
 }
 
 .wp-block-create-block-recipe-editor .recipe-ingredient {
 	display: flex;
 	flex-wrap: wrap;  /* Allows wrapping if space is limited */
-	/* gap: 0rem; */        /* Adds spacing between the inputs */
 	align-items: center; /* Vertically center the elements */
 }
 
 .wp-block-create-block-recipe-editor 
 :is(.recipe-ingredient-quantity-fraction, .recipe-ingredient-unit-choice) {
-	margin-right: 1rem;        /* Adds spacing between the inputs */
+	margin-right: 0.4rem;        /* Adds spacing between the inputs */
+}
+
+/* Custom checkbox styling */
+.wp-block-create-block-recipe-editor .recipe-checkbox {
+	appearance: none;
+	width: 1.5rem;
+	height: 1.5rem;
+	border: 0.15rem solid #a35f00; /* Orange-red border */
+	border-radius: 0.3rem;
+	position: relative;
+	cursor: pointer;
+	background-color: white; /* Default background */
+	margin-right: 0.5rem;
+}
+
+/* Custom checkmark and background color when checked */
+.wp-block-create-block-recipe-editor .recipe-checkbox:checked {
+	background-color: var(--wp--preset--color--secondary); /* Orange-red background */
+}
+
+.wp-block-create-block-recipe-editor .recipe-checkbox:checked::before {
+	content: '\2714'; /* Unicode checkmark */
+	font-size: 1.4rem;
+	color: white;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/* Strikethrough effect when checked */
+.wp-block-create-block-recipe-editor .recipe-checkbox:checked ~ .recipe-ingredient-text {
+	color: lighten(black, 40%);
+	text-decoration: line-through #a35f007a;
 }
