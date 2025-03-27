@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@wordpress/element';
+/* import { useState, useEffect } from '@wordpress/element'; */
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 // Import block toolbar icons
 import { TbCircleLetterMFilled ,TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
@@ -94,7 +94,7 @@ const getTranslation = (text) => {
 
 export default function Edit(props) {
 	const { attributes, setAttributes } = props;
-	const { unitSystem, blockHeading, ingredients } = attributes;
+	const { unitSystem, ingredients } = attributes;
 
 	// Function to toggle between unit systems
 	const toggleUnitSystem = () => {
@@ -118,10 +118,6 @@ export default function Edit(props) {
 		default:
 			return <TbCircleDotFilled />;
 		}
-	};
-
-	const handleHeadingChange = (e) => {
-		setAttributes({ blockHeading: e.target.value });
 	};
 
 	// Handle ingredient changes
@@ -227,119 +223,110 @@ export default function Edit(props) {
 				</ToolbarGroup>
 			</BlockControls>
 
-			<h2>
-				<input
-					className="wp-block-heading "
-					type="text"
-					value={blockHeading}
-					onChange={handleHeadingChange}
-					placeholder={getTranslation('Enter heading...')}
-					style={{ all: 'inherit', border: 'none', outline: 'none', background: 'transparent', width: '100%' }}
-				/>
-			</h2>
-
-			<div className="ingredient-inputs-container">
-				{/* Render each ingredient */}
+			<div className="ingredients-container">
+				{/* Render each ingredient to a list */}
 				{ingredients.map((ingredient, index) => (
-					<div key={index} className="ingredient-input">
-						<div className="ingredient-controllers">
+					<div key={index} className="ingredient-item">
+						<div className='recipe-ingredient-arrows'>
+							{/* Button to move ingredient up in the list */}
 							<button
-								onClick={() => deleteIngredient(index)}
-								className='recipe-ingredient-delete'
+								onClick={() => moveIngredientUp(index)}
+								className='recipe-ingredient-arrow-up'
 							>
-								<IconDelete />
+								<IconArrowUp />
 							</button>
-
-							<div className='recipe-ingredient-arrows'>
-								{/* Button to move ingredient up in the list */}
-								<button
-									onClick={() => moveIngredientUp(index)}
-									className='recipe-ingredient-arrow-up'
-								>
-									<IconArrowUp />
-								</button>
-								{/* Button to move ingredient up in the list */}
-								<button
-									onClick={() => moveIngredientDown(index)}
-									className='recipe-ingredient-arrow-down'
-								>
-									<IconArrowDown />
-								</button>
-							</div>
-
+							{/* Button to move ingredient down in the list */}
+							<button
+								onClick={() => moveIngredientDown(index)}
+								className='recipe-ingredient-arrow-down'
+							>
+								<IconArrowDown />
+							</button>
 						</div>
 
-						{/* Unit Type */}
-						<select
-							onChange={(e) => handleUnitTypeChange(index, e)}
-							name="Unit Type"
-							value={ingredient.unitType}
-							className='recipe-input-unit-type'
+						{/* Container for the ingredient item inputs */}
+						<div className="ingredient-inputs">
+							{/* Unit Type */}
+							<select
+								onChange={(e) => handleUnitTypeChange(index, e)}
+								name="Unit Type"
+								value={ingredient.unitType}
+								className="recipe-input-unit-type"
+							>
+								<option value="" title="By the eye">👁</option>
+								<option value={UnitType.MASS} title={getTranslation('Mass')}>⚖️</option>
+								<option value={UnitType.VOLUME} title={getTranslation('Volume')}>💧</option>
+								<option value={UnitType.TOOL} title={getTranslation('Tool')}>🥄</option>
+							</select>
+
+							{/* Quantity */}
+							<input 
+								onChange={(e) => handleQuantityChange(index, e)} 
+								className='recipe-input-quantity' 
+								type="text" 
+								placeholder={getTranslation('How much?')}
+								value={ingredient.quantity} 
+							/>
+
+							{/* Quantity Fraction */}
+							<select 
+								onChange={(e) => handleQuantityFractionChange(index, e)} 
+								name="Quantity Fraction" 
+								className="recipe-input-quantity-fraction"
+								value={ingredient.quantityFraction}
+							>
+								<option value=""></option>
+								<option value="½">½</option>
+								<option value="⅓">⅓</option>
+								<option value="¼">¼</option>
+								<option value="⅕">⅕</option>
+								<option value="⅙">⅙</option>
+								<option value="⅛">⅛</option>
+								<option value="⅔">⅔</option>
+								<option value="⅖">⅖</option>
+								<option value="⅜">⅜</option>
+								<option value="¾">¾</option>
+								<option value="⅝">⅝</option>
+								<option value="⅞">⅞</option>
+							</select>
+
+							{/* Unit Choice */}
+							{ingredient.unitType && ingredient.unitType !== "" && (
+								<select
+									onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)} 
+									name="Unit Choice" 
+									className="recipe-input-unit-choice"
+									value={ingredient.unitChoice}
+								>
+									{/* <option value="" disabled>{getTranslation('Select a unit')}</option> */}
+									{(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
+										<option key={i} value={option}>{getTranslation(option)}</option>
+									))}
+								</select>
+							)}
+
+							{/* Ingredient Name */}
+							<input 
+								onChange={(e) => handleNameChange(index, e)} 
+								className='recipe-input-ingredient-name' 
+								type="text" 
+								placeholder={getTranslation('Ingredient name...')} 
+								value={ingredient.name} 
+							/>
+						</div>
+
+						{/* Button to delete the ingredient item from the list */}
+						<button
+							onClick={() => deleteIngredient(index)}
+							className='recipe-ingredient-delete'
 						>
-							<option value="">No unit</option>
-							<option value={UnitType.MASS}>⚖️ {getTranslation('Mass')}</option>
-							<option value={UnitType.VOLUME}>💧 {getTranslation('Volume')}</option>
-							<option value={UnitType.TOOL}>🥄 {getTranslation('Tool')}</option>
-						</select>
-
-						{/* Quantity */}
-						<input 
-							onChange={(e) => handleQuantityChange(index, e)} 
-							className='recipe-input-quantity' 
-							type="text" 
-							placeholder={getTranslation('How much?')}
-							value={ingredient.quantity} 
-						/>
-
-						{/* Quantity Fraction */}
-						<select 
-							onChange={(e) => handleQuantityFractionChange(index, e)} 
-							name="Quantity Fraction" 
-							className="recipe-input-quantity-fraction"
-							value={ingredient.quantityFraction}
-						>
-							<option value=""></option>
-							<option value="½">½</option>
-							<option value="⅓">⅓</option>
-							<option value="¼">¼</option>
-							<option value="⅕">⅕</option>
-							<option value="⅙">⅙</option>
-							<option value="⅛">⅛</option>
-							<option value="⅔">⅔</option>
-							<option value="⅖">⅖</option>
-							<option value="⅜">⅜</option>
-							<option value="¾">¾</option>
-							<option value="⅝">⅝</option>
-							<option value="⅞">⅞</option>
-						</select>
-
-						{/* Unit Choice */}
-						<select 
-							onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)} 
-							name="Unit Choice" 
-							className="recipe-input-unit-choice"
-							value={ingredient.unitChoice}
-						>
-							<option value="" disabled>{getTranslation('Select a unit')}</option>
-							{(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
-								<option key={i} value={option}>{getTranslation(option)}</option>
-							))}
-						</select>
-
-						{/* Ingredient Name */}
-						<input 
-							onChange={(e) => handleNameChange(index, e)} 
-							className='recipe-input-ingredient-name' 
-							type="text" 
-							placeholder={getTranslation('Ingredient name...')} 
-							value={ingredient.name} 
-						/>
+							<IconDelete />
+						</button>
 					</div>
 				))}
-
 			</div>
 
-			{/* Button to add a new ingredient */}
+			{/* Button to add a new ingredient item to the list */}
 			<button
 				onClick={addIngredient}
 				className='recipe-ingredient-add'

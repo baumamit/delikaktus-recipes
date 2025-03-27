@@ -5,10 +5,6 @@
 ?>
 
 <div <?php echo get_block_wrapper_attributes(); ?>>
-	<?php if ( ! empty( $attributes['blockHeading'] ) ) : ?>
-		<h2><?php echo esc_html( $attributes['blockHeading'] ); ?></h2>
-	<?php endif; ?>
-
 	<div class="recipe-ingredients-list">
 		<?php if ( ! empty( $attributes['ingredients'] ) && is_array( $attributes['ingredients'] ) ) : ?>
 			<?php foreach ( $attributes['ingredients'] as $ingredient ) : ?>

@@ -6,7 +6,6 @@
 	"title": "Recipe Editor",
 	"category": "widgets",
 	"attributes": {
-		"blockHeading": { "type": "string", "default": "Ingredients" },
 		"unitSystem": { "type": "string", "default": "metric" },
 		"ingredients": {
 			"type": "array",

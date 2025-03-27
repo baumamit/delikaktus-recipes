@@ -1,119 +1,131 @@
 /**
  * The following styles get applied inside the editor only.
  */
- .editor-styles-wrapper .wp-block-create-block-recipe-editor * {
-	margin: 0;
-	padding: 0;
-}
-
-
+/* ______ BLOCK ______ */
 .editor-styles-wrapper .wp-block-create-block-recipe-editor {
-	border: 4px dashed orange;
-	border-radius: 0.6rem;
 	margin: 0;
 	padding: 0;
 	display: flex;
     flex-direction: column;
 }
-
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers {
-	display: inline-flex;
-	flex-wrap: nowrap;  /* Allows wrapping if space is limited */
+ .editor-styles-wrapper .wp-block-create-block-recipe-editor * {
+	margin: 0;
+	padding: 0;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button {
+/* ----- BUTTONS ----- */
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button {
+	align-self: center;
 	border: none;
+	background-color: transparent;
 	color: inherit;
-	border-radius: 0.2em;
-	margin-right: 0.3rem;
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers .recipe-ingredient-arrows>* {
-	font-size: 1.2rem;
-	background-color: rgb(239, 209, 255);
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers .recipe-ingredient-arrows>*:hover {
-	font-size: 1.2rem;
-	background-color: rgb(184, 52, 254);
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers .recipe-ingredient-arrows>*:active {
-	font-size: 1.2rem;
-	background-color: rgb(201, 102, 255);
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete>* {
-	font-size: 1.6rem;
+/* ###### INGREDIENTS CONTAINER ###### */
+
+/* ----- INGREDIENT ITEM ----- */
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-item {
+    display: flex;
+    align-items: center; /* Vertically align all elements inside each ingredient item */
+    gap: 0.5rem; /* Adjust spacing between elements */
+	margin-bottom: 0.8rem;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container .ingredient-controllers .recipe-ingredient-arrows {
-	display: flex;
-	flex-direction: column;
-	gap: 0.3rem
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete {
-	font-size: inherit;
+
+/* *** ARROW BUTTONS *** */
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-ingredient-arrows {
+    display: flex;
+    flex-direction: column;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add {
-	font-size: inherit;
-	align-self: center; /* Moves the button to the right */
-	margin-top: 0.5rem;
-	position:relative;
-	right: 0;
-	background-color: rgb(209, 251, 209);
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-ingredient-arrows button {
+	font-size: large;
+	color: var(--wp--preset--color--text, var(--wp--preset--color--contrast, black));
+	border-radius: 0.3em;
+	height: 100%;
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add:hover {
-	background-color: rgb(54, 226, 54);
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-ingredient-arrows button:hover {
+	background-color: rgb(154, 54, 208);
+	color: var(--wp--preset--color--background, var(--wp--preset--color--base, white));
 }
-.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add:active {
-	background-color: rgb(229, 255, 229);
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-ingredient-arrows button:active {
+	background-color: rgb(197, 115, 241);
 }
-
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete {
-	background-color: rgb(255, 209, 209);
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete:hover {
-	background-color: rgb(255, 71, 71);
-}
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-controllers button.recipe-ingredient-delete:active {
-	background-color: rgb(253, 238, 238);
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-ingredient-arrows button svg {
+	height: 100%;
+	text-align: center;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-system {
-	width: 5rem;      /* Let the width adjust based on content */
-	padding: 0.1rem 0.2rem;
-	margin-right: 2rem;        /* Adds spacing between the inputs */
-	/* flex: 1; */          /* Ensures elements grow if there's space */
-}
-
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container {
+/* *** INPUTS *** */
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs {
 	display: flex;
 	flex-wrap: wrap;  /* Allows wrapping if space is limited */
-	gap: 0.3rem;        /* Adds spacing between the inputs */
+	align-self: center; /* Vertically center the elements */
 	align-items: center; /* Vertically center the elements */
+	width: 100%;
 }
 
-.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs-container>* {
-	font-size: 1.1rem;
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs * {
+	font-size: large;
+}
+
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-type,
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity,
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-choice,
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-ingredient-name {
+	margin-left: 0.3rem;
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-type,
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity-fraction,
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-choice {
-	min-width: 2.5rem;  /* Minimum width to prevent collapsing */
-	width: auto;      /* Let the width adjust based on content */
-	padding: 0.1rem 1rem 0.1rem 0.1rem ;
+	padding: 0rem 1.2rem 0 0.1rem ;
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-quantity {
-	width: 2.5rem;      /* Let the width adjust based on content */
-	padding: 0.1rem;
+	width: 2.6rem;      /* Let the width adjust based on content */
+	padding: 0 0.1rem 0 0.1rem ;
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-ingredient-name {
 	min-width: 2rem;  /* Minimum width to prevent collapsing */
-	padding: 0.1rem;
+	padding: 0 0.1rem 0 0.1rem ;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	flex: 1;          /* Ensures elements grow if there's space */
+	flex: content;          /* Ensures elements grow if there's space */
+}
+
+/* *** DELETE INGREDIENT BUTTON *** */
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-delete {
+	color: rgb(199, 2, 2);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-delete:hover {
+	color: rgb(92, 4, 4);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-delete:active {
+	color: rgb(240, 3, 3);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-delete>* {
+	font-size: x-large;
+}
+
+/* ###### ADD INGREDIENT BUTTON ###### */
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add {
+	margin: 0.5rem 0;
+	display: block;
+	position:relative;
+	right: 0;
+	border: none;
+	color: rgb(17, 114, 17);
+	width: 5rem;
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add:hover {
+	color: rgb(7, 55, 7);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add:active {
+	color: rgb(12, 193, 12);
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor button.recipe-ingredient-add>* {
+	font-size: xx-large;
 }
