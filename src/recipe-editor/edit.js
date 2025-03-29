@@ -2,6 +2,7 @@
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 // Import block toolbar icons
 import { TbCircleLetterMFilled ,TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
+import { GiKnifeFork as PortionsModeButton } from "react-icons/gi";
 // Import add/delete icons
 import { MdAddToPhotos as IconAdd, MdDelete as IconDelete } from "react-icons/md";
 // Import add/delete icons
@@ -29,6 +30,8 @@ import { useBlockProps, BlockControls } from '@wordpress/block-editor';
  */
 import './editor.scss';
 
+import PortionsEditPanel from "./components/PortionsEditPanel";
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -47,6 +50,7 @@ const UnitSystem = {
 
 // Enum-like object to represent the type of units for each ingredient
 const UnitType = {
+	EYE: 'eye',
 	MASS: 'mass',
 	VOLUME: 'volume',
 	TOOL: 'tool',
@@ -94,8 +98,15 @@ const getTranslation = (text) => {
 
 export default function Edit(props) {
 	const { attributes, setAttributes } = props;
-	const { unitSystem, ingredients } = attributes;
 
+	// Ensure attributes have default values
+	const {
+		unitSystem = UnitSystem.DEFAULT,
+		ingredients = [],
+		portionsMode = false,
+		portionsAmount = 1
+	} = attributes;
+	
 	// Function to toggle between unit systems
 	const toggleUnitSystem = () => {
 		const nextUnitSystem = {
@@ -103,11 +114,16 @@ export default function Edit(props) {
 			[UnitSystem.METRIC]: UnitSystem.IMPERIAL,
 			[UnitSystem.IMPERIAL]: UnitSystem.DEFAULT,
 		};
-
 		const newUnitSystem = nextUnitSystem[unitSystem];
 		setAttributes({ unitSystem: newUnitSystem });
 	};
-
+	// Function to toggle between unit systems
+	const togglePortionsMode = () => {
+		console.log('Old portionsMode =',portionsMode);
+		
+		setAttributes({ portionsMode: !portionsMode });
+	};
+	
 	// Choose the appropriate icon based on the current mode
 	const getUnitSystemIcon = () => {
 		switch (unitSystem) {
@@ -133,7 +149,7 @@ export default function Edit(props) {
 			ingredients: [
 				...ingredients,
 				{
-					unitType: '',
+					unitType: 'mass',
 					quantity: '',
 					quantityFraction: '',
 					unitChoice: '',
@@ -215,13 +231,27 @@ export default function Edit(props) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
+						id='toolbar-button-unit-system'
 						icon={getUnitSystemIcon()}
 						label={getTranslation(unitSystem.charAt(0).toUpperCase() + unitSystem.slice(1) + ' Units')}
 						onClick={toggleUnitSystem}
 						isPressed={false}
 					/>
+					<ToolbarButton
+							id='toolbar-button-portions-mode'
+							icon={<PortionsModeButton />}
+							label='Portions Control'
+							onClick={togglePortionsMode}
+							isPressed={portionsMode}
+					/>
 				</ToolbarGroup>
 			</BlockControls>
+
+			<PortionsEditPanel
+				portionsMode={portionsMode}
+				portions={portionsAmount}
+				setPortions={ (newPortionsAmount) => setAttributes({ portionsAmount: newPortionsAmount }) }
+			/>
 
 			<div className="ingredients-container">
 				{/* Render each ingredient to a list */}
@@ -253,7 +283,7 @@ export default function Edit(props) {
 								value={ingredient.unitType}
 								className="recipe-input-unit-type"
 							>
-								<option value="" title="By the eye">👁</option>
+								<option value={UnitType.EYE} title="By the eye">👁</option>
 								<option value={UnitType.MASS} title={getTranslation('Mass')}>⚖️</option>
 								<option value={UnitType.VOLUME} title={getTranslation('Volume')}>💧</option>
 								<option value={UnitType.TOOL} title={getTranslation('Tool')}>🥄</option>
@@ -263,42 +293,44 @@ export default function Edit(props) {
 							<input 
 								onChange={(e) => handleQuantityChange(index, e)} 
 								className='recipe-input-quantity' 
-								type="text" 
-								placeholder={getTranslation('How much?')}
+								type="number"
+								placeholder="1"
+								label='How much of this ingredient?'
 								value={ingredient.quantity} 
 							/>
 
 							{/* Quantity Fraction */}
-							<select 
-								onChange={(e) => handleQuantityFractionChange(index, e)} 
-								name="Quantity Fraction" 
-								className="recipe-input-quantity-fraction"
-								value={ingredient.quantityFraction}
-							>
-								<option value=""></option>
-								<option value="½">½</option>
-								<option value="⅓">⅓</option>
-								<option value="¼">¼</option>
-								<option value="⅕">⅕</option>
-								<option value="⅙">⅙</option>
-								<option value="⅛">⅛</option>
-								<option value="⅔">⅔</option>
-								<option value="⅖">⅖</option>
-								<option value="⅜">⅜</option>
-								<option value="¾">¾</option>
-								<option value="⅝">⅝</option>
-								<option value="⅞">⅞</option>
-							</select>
+							{(ingredient.unitType === "eye" || ingredient.unitType === "tool") && (
+								<select 
+									onChange={(e) => handleQuantityFractionChange(index, e)} 
+									name="Quantity Fraction" 
+									className="recipe-input-quantity-fraction"
+									value={ingredient.quantityFraction}
+								>
+									<option value=""></option>
+									<option value="½">½</option>
+									<option value="⅓">⅓</option>
+									<option value="¼">¼</option>
+									<option value="⅕">⅕</option>
+									<option value="⅙">⅙</option>
+									<option value="⅛">⅛</option>
+									<option value="⅔">⅔</option>
+									<option value="⅖">⅖</option>
+									<option value="⅜">⅜</option>
+									<option value="¾">¾</option>
+									<option value="⅝">⅝</option>
+									<option value="⅞">⅞</option>
+								</select>
+							)}
 
 							{/* Unit Choice */}
-							{ingredient.unitType && ingredient.unitType !== "" && (
+							{(ingredient.unitType && ingredient.unitType !== "eye") && (
 								<select
 									onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)} 
 									name="Unit Choice" 
 									className="recipe-input-unit-choice"
 									value={ingredient.unitChoice}
 								>
-									{/* <option value="" disabled>{getTranslation('Select a unit')}</option> */}
 									{(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
 										<option key={i} value={option}>{getTranslation(option)}</option>
 									))}

@@ -4,14 +4,17 @@
 /* ______ BLOCK ______ */
 .editor-styles-wrapper .wp-block-create-block-recipe-editor {
 	margin: 0;
-	padding: 0;
+	padding: 1rem 0;
 	display: flex;
     flex-direction: column;
 }
  .editor-styles-wrapper .wp-block-create-block-recipe-editor * {
 	margin: 0;
 	padding: 0;
+	transition: 100ms;
 }
+
+
 
 /* ----- BUTTONS ----- */
 .editor-styles-wrapper .wp-block-create-block-recipe-editor button {
@@ -67,6 +70,9 @@
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs * {
 	font-size: large;
+}
+.editor-styles-wrapper .wp-block-create-block-recipe-editor .ingredient-inputs .recipe-input-unit-type {
+	font-size: x-large;
 }
 
 .editor-styles-wrapper .wp-block-create-block-recipe-editor .recipe-input-unit-type,

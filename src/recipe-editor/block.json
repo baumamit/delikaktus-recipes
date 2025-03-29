@@ -13,14 +13,16 @@
 			"items": {
 				"type": "object",
 				"properties": {
-					"unitType": { "type": "string", "default": "" },
-					"quantity": { "type": "string", "default": "" },
+					"unitType": { "type": "string", "default": "mass" },
+					"quantity": { "type": "string", "default": "1" },
 					"quantityFraction": { "type": "string", "default": "" },
 					"unitChoice": { "type": "string", "default": "" },
 					"name": { "type": "string", "default": "" }
 				}
 			}
-		}
+		},
+		"portionsMode": { "type": "boolean", "default": true },
+		"portionsAmount": { "type": "number", "default": 1 }
 	},
 	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},
