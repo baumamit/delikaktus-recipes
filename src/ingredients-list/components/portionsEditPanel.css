@@ -1,0 +1,14 @@
+.delikaktus-recipes-ingredients-list-portions-edit-panel {
+    display: flex;
+    gap: 1rem;
+    align-items: center; /* Vertically center the elements */
+}
+
+.editor-styles-wrapper .delikaktus-recipes-ingredients-list-portions-input-amount {
+    font-size: large;
+    font-weight: 700;
+    width: 3rem;
+    border-radius: 0.5rem;
+    padding: 0 0.1rem 0 0.1rem;
+    text-align: center;
+}
