@@ -157,9 +157,9 @@ export default function Edit(props) {
                 ...ingredients,
                 {
                     unitType: 'mass',
-                    quantity: '',
+                    quantity: '1',
                     quantityFraction: '',
-                    unitChoice: '',
+                    unitChoice: 'g',
                     name: ''
                 }
             ]
@@ -301,7 +301,6 @@ export default function Edit(props) {
                                 onChange={(e) => handleQuantityChange(index, e)}
                                 className='delikaktus-recipes-input-quantity'
                                 type="number"
-                                placeholder="1"
                                 label='How much of this ingredient?'
                                 value={ingredient.quantity}
                             />
