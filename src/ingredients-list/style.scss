@@ -1,0 +1,63 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .wp-block-delikaktus-recipes-ingredients-list {
+    background-color: inherit;
+    color: inherit;
+    margin: 0;
+    padding: inherit;
+}
+.wp-block-delikaktus-recipes-ingredients-list * {
+    padding: 0;
+    margin: 0;
+}
+
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-item {
+    display: flex;
+    flex-wrap: wrap;  /* Allows wrapping if space is limited */
+    align-items: center; /* Vertically center the elements */
+}
+
+.wp-block-delikaktus-recipes-ingredients-list 
+:is(.delikaktus-recipes-input-quantity-fraction, .delikaktus-recipes-input-unit-choice) {
+    margin-right: 0.4rem;        /* Adds spacing between the inputs */
+}
+
+/* Custom checkbox styling */
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox {
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 0.15rem solid var(--wp--preset--color--primary); /* Orange-red border */
+    border-radius: 0.3rem;
+    position: relative;
+    cursor: pointer;
+    background-color: var(--wp--preset--color--background, var(--wp--preset--color--base, white)); /* Default background */
+    margin-right: 0.5rem;
+}
+
+/* Custom checkmark and background color when checked */
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox:checked {
+    background-color: var(--wp--preset--color--secondary); /* Orange-red background */
+}
+
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox:checked::before {
+    content: '\2714'; /* Unicode checkmark */
+    font-size: 1.3rem;
+    color: var(--wp--preset--color--background, var(--wp--preset--color--base, white));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Strikethrough effect when checked */
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox:checked ~ .delikaktus-recipes-ingredients-list-ingredient-text {
+    color: var(--wp--preset--color--text, var(--wp--preset--color--contrast, black));
+    opacity: 0.6; /* Makes it appear lighter */
+    text-decoration: line-through var(--wp--preset--color--tertiary);
+}

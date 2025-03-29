@@ -1,55 +1,42 @@
-=== Recipe Editor ===
-Contributors:      The WordPress Contributors
-Tags:              block
-Tested up to:      6.7
-Stable tag:        0.1.0
-License:           GPL-2.0-or-later
-License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+=== DELIKAKTUS Recipes ===
+Contributors:         Amit Baum
+Tags:                 recipes, ingredients, block, delikaktus
+Tested up to:         6.7
+Stable tag:           0.1.0
+License:              GPL-2.0-or-later
+License URI:          https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block scaffolded with Create Block tool.
+Tools for creating a great recipes blog, including interactive and dynamic blocks. Created and designed by actual chefs of the DELIKAKTUS.com team.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
-
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+This plugin provides the "Recipe Ingredients List" block, designed to enhance recipe posts with a dynamic and interactive ingredients list. It allows users to easily manage and display ingredients, improving the user experience for recipe readers.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/recipe-editor` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-
+1. Upload the plugin files to the `/wp-content/plugins/delikaktus-recipes` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How do I use the "Recipe Ingredients List" block? =
 
-An answer to that question.
+After activating the plugin, you can add the "Recipe Ingredients List" block to your posts or pages through the WordPress block editor.
 
-= What about foo bar? =
+= Can I customize the appearance of the ingredients list? =
 
-Answer to foo bar dilemma.
+Yes, you can customize the appearance of the ingredients list using CSS.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Screenshot showing the "Recipe Ingredients List" block in the WordPress block editor.
+2. Screenshot showing the rendered ingredients list on a recipe post.
 
 == Changelog ==
 
 = 0.1.0 =
-* Release
+* Initial release of the DELIKAKTUS Recipes plugin.
 
-== Arbitrary section ==
+== DELIKAKTUS.com Team ==
 
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+Created and designed by actual chefs of the DELIKAKTUS.com team, this plugin aims to provide high quality tools for recipe bloggers.

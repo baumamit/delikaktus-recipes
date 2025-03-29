@@ -28,3 +28,9 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# Compiled translation files
+languages/*.mo
+
+# WordPress asset files
+build/*.asset.php

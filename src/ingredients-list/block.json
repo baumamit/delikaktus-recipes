@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "delikaktus-recipes/ingredients-list",
+    "version": "0.1.0",
+    "title": "Recipe Ingredients List",
+    "category": "widgets",
+    "description": "Dynamic ingredients list for recipe posts, created by the DELIKAKTUS.com team.",
+    "textdomain": "delikaktus-recipes",
+    "attributes": {
+        "unitSystem": { "type": "string", "default": "metric" },
+        "ingredients": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "unitType": { "type": "string", "default": "mass" },
+                    "quantity": { "type": "string", "default": "1" },
+                    "quantityFraction": { "type": "string", "default": "" },
+                    "unitChoice": { "type": "string", "default": "" },
+                    "name": { "type": "string", "default": "" }
+                }
+            }
+        },
+        "portionsMode": { "type": "boolean", "default": true },
+        "portionsAmount": { "type": "number", "default": 1 }
+    },
+    "supports": {
+        "html": false
+    },
+    "example": {},
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css",
+    "render": "file:./render.php",
+    "viewScript": "file:./view.js"
+}

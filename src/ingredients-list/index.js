@@ -5,6 +5,7 @@
  */
 import { registerBlockType } from '@wordpress/blocks';
 import { LuCookingPot } from 'react-icons/lu'; // Import the icon
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * All files containing `style` keyword are bundled together. The code used
@@ -25,10 +26,10 @@ import metadata from './block.json';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-registerBlockType( metadata.name, {
-	/**
-	 * @see ./edit.js
-	 */
-	icon: LuCookingPot,
-	edit: Edit,
-} );
+registerBlockType(metadata.name, {
+    /**
+     * @see ./edit.js
+     */
+    icon: LuCookingPot,
+    edit: Edit,
+});
