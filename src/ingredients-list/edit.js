@@ -50,62 +50,70 @@ import './editor.scss';
 
 // Enum-like object to represent unit system modes
 const UnitSystem = {
-    DEFAULT: 'default',
-    METRIC: 'metric',
-    IMPERIAL: 'imperial',
+    DEFAULT: "default",
+    METRIC: "metric",
+    IMPERIAL: "imperial",
 };
 
 // Enum-like object to represent the type of units for each ingredient
 const UnitType = {
-    EYE: 'eye',
-    MASS: 'mass',
-    VOLUME: 'volume',
-    TOOL: 'tool',
+    EYE: "eye",
+    MASS: "mass",
+    VOLUME: "volume",
+    TOOL: "tool",
 };
 
 // Unit options based on unit system and type
 const unitOptions = {
     [UnitSystem.METRIC]: {
-        [UnitType.MASS]: ['g', 'kg'],
-        [UnitType.VOLUME]: ['ml', 'L'],
-        [UnitType.TOOL]: ['cup', 'tsp', 'Tbsp'],
+        [UnitType.EYE]: [""],
+        [UnitType.MASS]: ["g", "kg"],
+        [UnitType.VOLUME]: ["ml", "L"],
+        [UnitType.TOOL]: ["cup", "tsp", "Tbsp"],
     },
     [UnitSystem.IMPERIAL]: {
-        [UnitType.MASS]: ['oz', 'lbs'],
-        [UnitType.VOLUME]: ['pint', 'qt'],
-        [UnitType.TOOL]: ['cup', 'tsp', 'Tbsp'],
+        [UnitType.EYE]: [""],
+        [UnitType.MASS]: ["oz", "lbs"],
+        [UnitType.VOLUME]: ["pint", "qt"],
+        [UnitType.TOOL]: ["cup", "tsp", "Tbsp"],
     },
-    [UnitSystem.DEFAULT]: {},
+    [UnitSystem.DEFAULT]: {
+        [UnitType.EYE]: [""],
+        [UnitType.MASS]: [""],
+        [UnitType.VOLUME]: [""],
+        [UnitType.TOOL]: ["cup", "tsp", "Tbsp"],
+    },
 };
 
 // Function to translate terms based on current language
 const getTranslation = (text) => {
     const translations = {
         en: {
-            cup: 'cup',
-            tsp: 'tsp',
-            Tbsp: 'Tbsp'
+            cup: "cup",
+            tsp: "tsp",
+            Tbsp: "Tbsp"
         },
         it: {
-            cup: 'tazza',
-            tsp: 'cucchiaino',
-            Tbsp: 'cucchiaio'
+            cup: "tazza",
+            tsp: "cucchiaino",
+            Tbsp: "cucchiaio"
         },
         he: {
-            cup: 'כוס',
-            tsp: 'כפית',
-            Tbsp: 'כף'
+            cup: "כוס",
+            tsp: "כפית",
+            Tbsp: "כף"
         },
     };
 
     // Function that returns the current language code or english as default
-    const currentLanguage = window.recipeEditorData?.currentLanguage || 'en';
+    const currentLanguage = window.delikaktusRecipesData?.currentLanguage;
     return translations[currentLanguage]?.[text] || text;
+
+
 };
 
 export default function Edit(props) {
     const { attributes, setAttributes } = props;
-
     // Ensure attributes have default values
     const {
         unitSystem = UnitSystem.DEFAULT,
@@ -114,6 +122,10 @@ export default function Edit(props) {
         portionsAmount = 1
     } = attributes;
 
+    /* useEffect(() => {
+        // You can also set state here or trigger any other effects needed
+      }, [attributes]); // This effect will run when portionsMode changes */
+    
     // Function to toggle between unit systems
     const toggleUnitSystem = () => {
         const nextUnitSystem = {
@@ -126,8 +138,6 @@ export default function Edit(props) {
     };
     // Function to toggle between unit systems
     const togglePortionsMode = () => {
-        console.log('Old portionsMode =', portionsMode);
-
         setAttributes({ portionsMode: !portionsMode });
     };
 
@@ -143,24 +153,32 @@ export default function Edit(props) {
         }
     };
 
-    // Handle ingredient changes
     const handleIngredientChange = (index, key, value) => {
-        const newIngredients = [...ingredients];
-        newIngredients[index] = { ...newIngredients[index], [key]: value };
-        setAttributes({ ingredients: newIngredients });
+        const newIngredients = ingredients.map((ingredient, i) =>
+            i === index
+            ? { ...ingredient, [key]: value }
+            : ingredient
+        );
+        // Update the attributes in one go
+        setAttributes({
+            ingredients: newIngredients,
+        });
     };
 
     // Handle adding a new ingredient
     const addIngredient = () => {
+        const defaultUnitType = UnitType.MASS;
+        const defaultUnitChoice = (unitOptions[unitSystem]?.[defaultUnitType] || [])[0] || '';
+        const defaultQuantity = "1";
         setAttributes({
             ingredients: [
                 ...ingredients,
                 {
-                    unitType: 'mass',
-                    quantity: '1',
-                    quantityFraction: '',
-                    unitChoice: 'g',
-                    name: ''
+                    unitType: defaultUnitType,
+                    quantity: defaultQuantity,
+                    quantityFraction: "",
+                    unitChoice: defaultUnitChoice,
+                    name: ""
                 }
             ]
         });
@@ -175,50 +193,38 @@ export default function Edit(props) {
     // Handle adding a new ingredient
     const moveIngredientUp = (index) => {
         if (index > 0) {
-            const indexIngredient = ingredients.filter((_, i) => i === index);
-            const initialIngredients = ingredients.filter((_, i) => i < index - 1);
-            const lastIngredients = ingredients.filter((_, i) => (i === index - 1) || (i > index));
-            setAttributes({
-                ingredients: [
-                    ...initialIngredients,
-                    ...indexIngredient,
-                    ...lastIngredients
-                ]
-            });
-        };
+            const newIngredients = [...ingredients];
+            [newIngredients[index - 1], newIngredients[index]] = [newIngredients[index], newIngredients[index - 1]];
+            setAttributes({ ingredients: newIngredients });
+        }
     };
 
     // Handle adding a new ingredient
     const moveIngredientDown = (index) => {
         if (index < ingredients.length - 1) {
-            const indexIngredient = ingredients.filter((_, i) => i === index);
-            const initialIngredients = ingredients.filter((_, i) => (i < index) || (i === index + 1));
-            const lastIngredients = ingredients.filter((_, i) => i > index + 1);
-            setAttributes({
-                ingredients: [
-                    ...initialIngredients,
-                    ...indexIngredient,
-                    ...lastIngredients
-                ]
-            });
-        };
+            const newIngredients = [...ingredients];
+            [newIngredients[index], newIngredients[index + 1]] = [newIngredients[index + 1], newIngredients[index]];
+            setAttributes({ ingredients: newIngredients });
+        }
     };
 
     // Handle unit type change
     const handleUnitTypeChange = (index, e) => {
         const newUnitType = e.target.value || UnitType.MASS; // Default to mass if empty
-        const newUnitChoice = (unitOptions[unitSystem]?.[newUnitType] || [])[0] || '';
-
-        // Update the attributes in one go
-        setAttributes({
-            ingredients: ingredients.map((ingredient, i) =>
-                i === index ? { ...ingredient, unitType: newUnitType, unitChoice: newUnitChoice } : ingredient
-            ),
-        });
+        const validUnitChoices = unitOptions[unitSystem]?.[newUnitType] || [];
+        const newUnitChoice = validUnitChoices[0] || '';
+        const newIngredients = ingredients.map((ingredient, i) =>
+            i === index
+                ? { ...ingredient, unitType: newUnitType, unitChoice: newUnitChoice }
+                : ingredient
+        );
+        // Update the unit choice based on the new unit type
+        setAttributes({ ingredients: newIngredients });
     };
 
     // Handle quantity change
     const handleQuantityChange = (index, e) => {
+        // Update the quantity in the ingredient
         handleIngredientChange(index, 'quantity', e.target.value);
     };
 
@@ -269,6 +275,8 @@ export default function Edit(props) {
                             <button
                                 onClick={() => moveIngredientUp(index)}
                                 className='delikaktus-recipes-ingredient-arrow-up'
+                                aria-label='Move ingredient up'
+                                title={getTranslation('Move ingredient up')}
                             >
                                 <IconArrowUp />
                             </button>
@@ -276,6 +284,8 @@ export default function Edit(props) {
                             <button
                                 onClick={() => moveIngredientDown(index)}
                                 className='delikaktus-recipes-ingredient-arrow-down'
+                                aria-label='Move ingredient down'
+                                title={getTranslation('Move ingredient down')}
                             >
                                 <IconArrowDown />
                             </button>
@@ -289,6 +299,8 @@ export default function Edit(props) {
                                 name="Unit Type"
                                 value={ingredient.unitType}
                                 className="delikaktus-recipes-input-unit-type"
+                                aria-label="Select unit type for ingredient"
+                                title={getTranslation('Select unit type')}
                             >
                                 <option value={UnitType.EYE} title="By the eye">👁</option>
                                 <option value={UnitType.MASS} title={getTranslation('Mass')}>⚖️</option>
@@ -303,6 +315,8 @@ export default function Edit(props) {
                                 type="number"
                                 label='How much of this ingredient?'
                                 value={ingredient.quantity}
+                                aria-label="Enter quantity"
+                                min="0"
                             />
 
                             {/* Quantity Fraction */}
@@ -312,6 +326,8 @@ export default function Edit(props) {
                                     name="Quantity Fraction"
                                     className="delikaktus-recipes-input-quantity-fraction"
                                     value={ingredient.quantityFraction}
+                                    aria-label="Select quantity fraction"
+                                    title={getTranslation('Select quantity fraction')}
                                 >
                                     <option value=""></option>
                                     <option value="½">½</option>
@@ -330,12 +346,18 @@ export default function Edit(props) {
                             )}
 
                             {/* Unit Choice */}
-                            {(ingredient.unitType && ingredient.unitType !== "eye") && (
+                            {/* Render <select> in metric or imperial unitSystem if the unitType not "by the eye" or in the single case that unitSystem is "default" and the unitType is "tool" */}
+                            { 
+                                ( ((unitSystem !== UnitSystem.DEFAULT) && (ingredient.unitType !== UnitType.EYE)) ||
+                                    (unitSystem === UnitSystem.DEFAULT && ingredient.unitType === UnitType.TOOL) )
+                                && (
                                 <select
                                     onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)}
                                     name="Unit Choice"
                                     className="delikaktus-recipes-input-unit-choice"
                                     value={ingredient.unitChoice}
+                                    aria-label="Select measurement unit"
+                                    title={getTranslation('Select measurement unit')}
                                 >
                                     {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
                                         <option key={i} value={option}>{getTranslation(option)}</option>
@@ -350,6 +372,8 @@ export default function Edit(props) {
                                 type="text"
                                 placeholder={getTranslation('Ingredient name...')}
                                 value={ingredient.name}
+                                aria-label="Enter ingredient name"
+                                title={getTranslation('Enter ingredient name')}
                             />
                         </div>
 
@@ -357,6 +381,8 @@ export default function Edit(props) {
                         <button
                             onClick={() => deleteIngredient(index)}
                             className='delikaktus-recipes-ingredient-delete'
+                            aria-label='Delete ingredient'
+                            title={getTranslation('Delete ingredient')}
                         >
                             <IconDelete />
                         </button>
@@ -368,6 +394,9 @@ export default function Edit(props) {
             <button
                 onClick={addIngredient}
                 className='delikaktus-recipes-ingredient-add'
+                aria-label='Add ingredient'
+                title={getTranslation('Add ingredient')}
+                disabled={ingredients.length >= 200} // Disable if already 20 ingredients
             >
                 <IconAdd />
             </button>
