@@ -1,0 +1,24 @@
+=== DELIKAKTUS Recipes ===
+Contributors:         Amit Baum
+Tags:                 recipes, ingredients, block, delikaktus
+Tested up to:         6.7
+Stable tag:           0.1.0
+License:              GPL-2.0-or-later
+License URI:          https://www.gnu.org/licenses/gpl-2.0.html
+
+Tools for creating a great recipes blog, including interactive and dynamic blocks. Created and designed by actual chefs of the DELIKAKTUS.com team.
+
+
+== Plugin Translation ==
+All translation strings are created in the folder "languages" under the plugin main folder.
+
+Terminal command for generating the basic .pot translation file:
+php -d memory_limit=1024M C:\wp-cli\wp-cli.phar i18n make-pot . languages/delikaktus-recipes.pot --exclude=vendor,node_modules,build,dist,assets
+
+In the seperately installed Poedit, create a new translation from the .pot file, and save in the file name format:
+delikaktus-recipes-it_IT.po
+delikaktus-recipes-en_EN.po
+and so on...
+
+After adding new translation strings in any of the files, run again the terminal command to generate the updated .pot file.
+Then open the .po file, and in the top menu choose translation --> Update from POT file... => choose the file and approve

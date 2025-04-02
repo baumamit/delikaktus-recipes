@@ -1,0 +1,74 @@
+# Copyright (C) 2025 Amit Baum
+# This file is distributed under the GPL-2.0-or-later.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DELIKAKTUS Recipes 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/delikaktus-"
+"recipes\n"
+"POT-Creation-Date: 2025-04-02T12:39:13+00:00\n"
+"PO-Revision-Date: 2025-04-02 14:43+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+"X-Domain: delikaktus-recipes\n"
+
+#. Plugin Name of the plugin
+#: delikaktus-recipes.php
+msgid "DELIKAKTUS Recipes"
+msgstr "Ricette DELIKAKTUS"
+
+#. Description of the plugin
+#: delikaktus-recipes.php
+msgid ""
+"Tools for creating a great recipes blog, including interactive and dynamic "
+"blocks. Created and designed by actual chefs of the DELIKAKTUS.com team."
+msgstr ""
+
+#. Author of the plugin
+#: delikaktus-recipes.php
+msgid "Amit Baum"
+msgstr ""
+
+#. Author URI of the plugin
+#: delikaktus-recipes.php
+msgid "https://delikaktus.com"
+msgstr ""
+
+#: src/ingredients-list/render.php:8
+msgid "English title!"
+msgstr "Titolo Italiano!"
+
+#: src/ingredients-list/edit.js:272
+msgid "How many portions?"
+msgstr "Quante porzioni?"
+
+#: src/ingredients-list/edit.js:320
+msgid "Mass"
+msgstr "Peso"
+
+#: src/ingredients-list/edit.js:384
+msgid "Ingredient name..."
+msgstr "Nome d'ingrediente..."
+
+#: src/ingredients-list/block.json
+msgctxt "block title"
+msgid "Recipe Ingredients List"
+msgstr "Ricette DELIKAKTUS - Lista d'ingridienti"
+
+#: src/ingredients-list/block.json
+msgctxt "block description"
+msgid ""
+"Dynamic ingredients list for recipe posts, created by the DELIKAKTUS.com "
+"team."
+msgstr ""
+
+#~ msgid "Hello, World!"
+#~ msgstr "Ciao, Mondo!"
+
+#~ msgid "Hello, world!"
+#~ msgstr "Ciao, Mondissimo!"

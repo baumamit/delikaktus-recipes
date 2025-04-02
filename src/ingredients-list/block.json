@@ -16,8 +16,8 @@
                 "type": "object",
                 "properties": {
                     "unitType": { "type": "string", "default": "mass" },
-                    "quantity": { "type": "string", "default": "1" },
-                    "quantityFraction": { "type": "string", "default": "" },
+                    "quantity": { "type": "number", "default": 1 },
+                    "quantityFraction": { "type": "number", "default": 0 },
                     "unitChoice": { "type": "string", "default": "g" },
                     "name": { "type": "string", "default": "" }
                 }
