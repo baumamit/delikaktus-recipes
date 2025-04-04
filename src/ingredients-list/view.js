@@ -23,7 +23,6 @@
 /* eslint-disable no-console */
 /* console.log( 'Hello World! (from create-block-recipe-editor block)' ); */
 /* eslint-enable no-console */
-//console.log("recipeEditorData:", recipeEditorData);
 
 document.addEventListener("DOMContentLoaded", function() {
     const portionsInput = document.querySelector(".delikaktus-recipes-portions-box-input");
@@ -38,26 +37,69 @@ document.addEventListener("DOMContentLoaded", function() {
     const portionsAmount = parseFloat(recipeEditorData.portions) || 1;// From localized PHP data
 
     portionsInput.addEventListener("input", function() {
-        //console.log("Portions Input Value: ", this.value);
         let portionsRatio = parseFloat(this.value) / portionsAmount;
-
         // Set default ratio if the input is invalid
         if (isNaN(portionsRatio) || portionsRatio <= 0) {
         portionsRatio = 1; 
         }
 
         ingredientQuantities.forEach((el, index) => {
-            let newQuantity = originalQuantities[index];
-            console.log('originalQuantities = ',originalQuantities[index]);
-            console.log("originalFractions = ", originalFractions[index]);
-
             const newSum = (parseFloat(originalQuantities[index]) + parseFloat(originalFractions[index])) * portionsRatio;
             console.log('newSum=(Quantities + Fractions) x PortionsRatio = ',newSum);
+            const unitType = el.dataset.unitType;
+
+            let newQuantity = originalQuantities[index];
+            let newFraction = originalFractions[index];
+            let roundedNewSum = 0;
 
             switch (unitSystem) {
                 case "metric":
-                    if (newSum <= 0.94) {
-                        newQuantity = Math.round(newSum * 10) / 10; // Round to the first decimal
+                    if ((unitType === 'mass') || (unitType === 'volume')) {
+                        if (newSum < 20) {
+                            newQuantity = Math.round(newSum); // Round to the closest unit
+                        } else if (newSum < 500) {
+                            newQuantity = Math.round(newSum / 5) * 5; // Round to the nearest 5 units
+                        } else if (newSum < 1000) {
+                            newQuantity = Math.round(newSum / 10) * 10; // Round to the nearest 10 units
+                        } else if (newSum >= 1000) {
+                            newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 units
+                        }
+                    } else { // unitType is tool or by the eye
+                        if (newSum < 0.95) {
+                            roundedNewSum = Math.round(newSum * 12) / 12; // Round to the closest t
+                        } else if (newSum < 2) {
+                            roundedNewSum = Math.round(newSum * 4) / 4; // Round to the closest quarter of a unit
+                        } else if (newSum < 10) {
+                            roundedNewSum = Math.round(newSum * 2) / 2; // Round to the closest half of a unit
+                        } else if (newSum < 20) {
+                            roundedNewSum = Math.round(newSum); // Round to the closest unit
+                        } else if (newSum < 500) {
+                            roundedNewSum = Math.round(newSum / 5) * 5; // Round to the closest 5 units
+                        } else if (newSum < 1000) {
+                            roundedNewSum = Math.round(newSum / 10) * 10; // Round to the closest 10 units
+                        } else if (newSum >= 1000) {
+                            roundedNewSum = Math.round(newSum / 25) * 25; // Round to the closest 25 units
+                        }
+                        newFraction = roundedNewSum % 1;
+                        newQuantity = Math.floor(roundedNewSum);
+                }
+                    // Update the data-quantity attribute value to keep the total quantity with the fractions
+                    el.dataset.quantity = newSum;
+                    // Update the data-quantity text content
+                    el.textContent = newQuantity > 0 ? newQuantity.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
+                    // Update the data-fraction attribute value
+                    fractionElements[index].dataset.quantityFraction = 0;
+                    // Update the data-fraction text content
+                    fractionElements[index].textContent = newFraction > 0 ? newFraction.toFixed(2).replace(/\.00$/, "") : " "; // Remove unnecessary decimals and convert to a string
+                    break;
+
+                /* default: // imperial or default
+                    if (newSum <= 1) {
+                        newQuantity = Math.round(newSum * 12) / 12; // Round to the nearest 12th
+                    } else if (newSum < 2) {
+                        newQuantity = Math.round(newSum * 4) / 4; // Round to the nearest quarter
+                    } else if (newSum < 5) {
+                        newQuantity = Math.round(newSum * 2) / 2; // Round to the nearest half
                     } else if (newSum < 10) {
                         newQuantity = Math.round(newSum); // Round to the closest g
                     } else if (newSum < 100) {
@@ -68,58 +110,22 @@ document.addEventListener("DOMContentLoaded", function() {
                         newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 g
                     } else if (newSum < 1000) {
                         newQuantity = Math.round(newSum / 50) * 50; // Round to the nearest 50 g
-                    } else if (newSum >= 1000) {
+                    } else {
                         newQuantity = Math.round(newSum / 100) * 100; // Round to the nearest 100 g
                     }
 
-                    fractionElements[index].textContent = ' ';
-                    fractionElements[index].dataset.quantityFraction = 0;
+                    fractionElements[index].textContent = originalFractions[index];
 
-                    /* fractionElements.forEach((el, i) => {
-                            el.textContent = 0;
-                    }); */
-                    break;
-
-                default: // imperial or default
-                console.log('imperial or default');
-                if (newSum <= 1) {
-                    newQuantity = Math.round(newSum * 12) / 12; // Round to the nearest 12th
-                } else if (newSum < 2) {
-                    newQuantity = Math.round(newSum * 4) / 4; // Round to the nearest quarter
-                } else if (newSum < 5) {
-                    newQuantity = Math.round(newSum * 2) / 2; // Round to the nearest half
-                } else if (newSum < 10) {
-                    newQuantity = Math.round(newSum); // Round to the closest g
-                } else if (newSum < 100) {
-                    newQuantity = Math.round(newSum / 5) * 5; // Round to the nearest 5 g
-                } else if (newSum < 200) {
-                    newQuantity = Math.round(newSum / 10) * 10; // Round to the nearest 10 g
-                } else if (newSum < 500) {
-                    newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 g
-                } else if (newSum < 1000) {
-                    newQuantity = Math.round(newSum / 50) * 50; // Round to the nearest 50 g
-                } else {
-                    newQuantity = Math.round(newSum / 100) * 100; // Round to the nearest 100 g
-                }
-                fractionElements.forEach((el, i) => {
-                    el.textContent = originalFractions[i];
-                });
-                break;
+                    break; */
             }
-
-            console.log('newQuantity = ',newQuantity);
-            
-            // Update the data-quantity attribute as well
-            el.dataset.quantity = newQuantity.toFixed(2).replace(/\.00$/, "");
-            //console.log('newQuantity.toFixed(2).replace(/\.00$/, "") = ',newQuantity.toFixed(2).replace(/\.00$/, ""));
-            
-
-            // Update the text content
-            el.textContent = newQuantity.toFixed(2).replace(/\.00$/, ""); // Remove unnecessary decimals
         });
 
-       /*  fractionElements.forEach((el, index) => {
-            el.textContent = originalFractions[index]; // Keep fractions unchanged for now
-        }); */
+        
+        // Update the step based on the current value
+        if (parseFloat(this.value) > 1) {
+            this.step = '1';
+        } else {
+            this.step = '0.125';
+        }
     });
 });

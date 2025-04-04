@@ -8,6 +8,7 @@
 
 // Assuming $attributes are passed to the render.php function
 // from the block's attributes set by the user in the block editor edit.js
+$attributes = isset($attributes) ? $attributes : []; // Ensure $attributes is defined
 $unitSystem = isset($attributes['unitSystem']) ? $attributes['unitSystem'] : 'metric'; // Default to 'metric' if not set
 $portionsAmount = isset($attributes['portionsAmount']) ? $attributes['portionsAmount'] : 1;  // Default to 1 portion if not set
 
@@ -20,11 +21,8 @@ wp_enqueue_script(
     true  // Load script in the footer
 );
 
-// Localize the script to pass dynamic values to JS
-wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', array(
-    'unitSystem' => $unitSystem,  // Pass unitSystem value dynamically
-    'portions' => $portionsAmount // Pass portionsAmount value
-));
+// Localize the script to pass all attributes to JS
+wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', $attributes);
 
 // Define a mapping between numeric values and their fraction symbols
 $fractionMap = [
@@ -54,7 +52,7 @@ $fractionMap = [
             class="delikaktus-recipes-portions-box-input"
             value="<?php echo esc_html($portionsAmount); ?>"
             min="0"
-            step="<?php echo ($portionsAmount >= 1) ? '1' : '0.1'; ?>"
+            step="<?php echo ($portionsAmount > 1) ? '1' :  '0.1'; ?>"
         />
     </div>
 
