@@ -23,7 +23,7 @@
 }
 
 .wp-block-delikaktus-recipes-ingredients-list 
-:is(.delikaktus-recipes-input-quantity-fraction, .delikaktus-recipes-input-unit-choice) {
+:is(.ingredient-quantity-fraction, .ingredient-unit-choice) {
     margin-right: 0.4rem;        /* Adds spacing between the inputs */
 }
 

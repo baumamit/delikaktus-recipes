@@ -79,7 +79,7 @@ const unitOptions = {
     [UnitSystem.IMPERIAL]: {
         [UnitType.EYE]: [""],
         [UnitType.MASS]: ["oz", "lbs"],
-        [UnitType.VOLUME]: ["pint", "qt"],
+        [UnitType.VOLUME]: ["fl oz", "pt", "qt", "gal"],
         [UnitType.TOOL]: ["cup", "tsp", "Tbsp"],
     },
     [UnitSystem.DEFAULT]: {

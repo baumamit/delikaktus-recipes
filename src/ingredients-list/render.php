@@ -3,6 +3,29 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
+//error_log(print_r($attributes, true));
+
+
+// Assuming $attributes are passed to the render.php function
+// from the block's attributes set by the user in the block editor edit.js
+$unitSystem = isset($attributes['unitSystem']) ? $attributes['unitSystem'] : 'metric'; // Default to 'metric' if not set
+$portionsAmount = isset($attributes['portionsAmount']) ? $attributes['portionsAmount'] : 1;  // Default to 1 portion if not set
+
+// Enqueue your frontend JavaScript file
+wp_enqueue_script(
+    'delikaktus-recipes-frontend-js',
+    plugin_dir_url(__FILE__) . 'view.js',
+    array('jquery'),
+    '1.0',
+    true  // Load script in the footer
+);
+
+// Localize the script to pass dynamic values to JS
+wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', array(
+    'unitSystem' => $unitSystem,  // Pass unitSystem value dynamically
+    'portions' => $portionsAmount // Pass portionsAmount value
+));
+
 // Define a mapping between numeric values and their fraction symbols
 $fractionMap = [
     "0.5"   => "½",
@@ -18,7 +41,6 @@ $fractionMap = [
     "0.625" => "⅝",
     "0.875" => "⅞"
 ];
-
 ?>
 
 <div <?php echo get_block_wrapper_attributes(); ?>>
@@ -26,15 +48,14 @@ $fractionMap = [
         <span class="delikaktus-recipes-portions-box-prompt">
             <?php echo __("How many portions would you like to make?", 'delikaktus-recipes'); ?>
         </span>
-        <span class="delikaktus-recipes-portions-box-input">
-            <?php
-            $portions = esc_html($attributes['portionsAmount']);
-            if (is_numeric($portions)) :
-                echo $portions;
-            endif;
-            ?>
-        </span>
-        <input type="number" class="portionsMultiplier" value="1" min="1">
+
+        <input
+            type="number"
+            class="delikaktus-recipes-portions-box-input"
+            value="<?php echo esc_html($portionsAmount); ?>"
+            min="0"
+            step="<?php echo ($portionsAmount >= 1) ? '1' : '0.1'; ?>"
+        />
     </div>
 
     <div class="delikaktus-recipes-ingredients-list-container">
@@ -54,7 +75,7 @@ $fractionMap = [
                     <span class="delikaktus-recipes-ingredients-list-checkbox-custom"></span>
 
                     <span class="ingredient-quantity" data-quantity="<?php echo $quantity; ?>">
-                        <?php echo $quantity; ?>
+                        <?php echo ($quantity > 0) ? $quantity : ''; ?>
                     </span>
 
                     <span class="ingredient-quantity-fraction" data-quantity-fraction="<?php echo $quantityFractionValue; ?>">
@@ -73,29 +94,3 @@ $fractionMap = [
         endif; ?>
     </div>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const portionsInput = document.querySelector(".portionsMultiplier");
-    const ingredientQuantities = document.querySelectorAll(".ingredient-quantity");
-    const fractionElements = document.querySelectorAll(".ingredient-quantity-fraction");
-
-    // Store initial values
-    const originalQuantities = Array.from(ingredientQuantities).map(el => parseFloat(el.dataset.quantity));
-    const originalFractions = Array.from(fractionElements).map(el => el.dataset.quantityFraction);
-
-    portionsInput.addEventListener("input", function() {
-        let multiplier = parseFloat(this.value);
-        if (isNaN(multiplier) || multiplier < 1) multiplier = 1;
-
-        ingredientQuantities.forEach((el, index) => {
-            const newQuantity = originalQuantities[index] * multiplier;
-            el.textContent = newQuantity.toFixed(2).replace(/\.00$/, ""); // Remove unnecessary decimals
-        });
-
-        fractionElements.forEach((el, index) => {
-            el.textContent = originalFractions[index]; // Keep fractions unchanged for now
-        });
-    });
-});
-</script>

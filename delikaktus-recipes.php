@@ -16,16 +16,8 @@
  * @package           CreateBlock
  */
 
- if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly and not from the WordPress absolute path.
-}
-
-if ( ! class_exists( 'Delikaktus_Recipes' ) ) {
-    class Delikaktus_Recipes {
-        // You can add class properties and methods here if needed
-    }
-
-    new Delikaktus_Recipes;
 }
 
 /**
@@ -43,19 +35,33 @@ add_action( 'init', 'create_block_delikaktus_recipes_block_init' );
 /**
  * Enqueues the necessary scripts and localizes the current language for use in JavaScript.
  */
-function delikaktus_recipes_enqueue_scripts() {
-    // Enqueue your plugin's JS file (adjust the path to where your JS is located)
-    wp_enqueue_script( 'delikaktus-recipes-js', plugin_dir_url( __FILE__ ) . 'js/edit.js', array(), '1.0', true );
+function delikaktus_recipes_enqueue_editor_scripts() {
+    $script_path = plugin_dir_path( __FILE__ ) . 'js/edit.js';
 
-    // Get the current language using Polylang (or whatever language plugin you're using)
-    $current_language = pll_current_language(); // This returns the current language code like 'en', 'fr', etc.
+    if ( file_exists( $script_path ) ) {
+        wp_enqueue_script( 
+            'delikaktus-recipes-editor-js', 
+            plugin_dir_url( __FILE__ ) . 'js/edit.js', 
+            array('wp-blocks', 'wp-i18n', 'wp-editor'), 
+            '1.0', 
+            true 
+        );
 
-    // Localize the script by passing the current language to JavaScript
-    wp_localize_script( 'delikaktus-recipes-js', 'recipeEditorData', array(
-        'currentLanguage' => $current_language, // Make it available in the JS file
-    ));
+        // Get the current language using Polylang (or fallback to WordPress default)
+        $current_language = function_exists('pll_current_language') ? pll_current_language() : get_locale();
+
+        // Localize script with the current language
+        wp_localize_script( 'delikaktus-recipes-editor-js', 'recipeEditorData', array(
+            'currentLanguage' => $current_language,
+            'unitSystem' => isset($attributes['unitSystem']) ? $attributes['unitSystem'] : 'metric', // Add your desired attribute here
+        ));
+    }
 }
-add_action( 'wp_enqueue_scripts', 'delikaktus_recipes_enqueue_scripts' );
+add_action( 'enqueue_block_editor_assets', 'delikaktus_recipes_enqueue_editor_scripts' );
+
+/**
+ * Enqueues frontend scripts and passes localized data.
+ */
 
 /**
  * Loads the plugin text domain for translation.
