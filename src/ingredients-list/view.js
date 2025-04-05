@@ -40,12 +40,11 @@ document.addEventListener("DOMContentLoaded", function() {
         let portionsRatio = parseFloat(this.value) / portionsAmount;
         // Set default ratio if the input is invalid
         if (isNaN(portionsRatio) || portionsRatio <= 0) {
-        portionsRatio = 1; 
+            portionsRatio = 1;
         }
 
         ingredientQuantities.forEach((el, index) => {
             const newSum = (parseFloat(originalQuantities[index]) + parseFloat(originalFractions[index])) * portionsRatio;
-            console.log('newSum=(Quantities + Fractions) x PortionsRatio = ',newSum);
             const unitType = el.dataset.unitType;
 
             let newQuantity = originalQuantities[index];
@@ -90,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Update the data-fraction attribute value
                     fractionElements[index].dataset.quantityFraction = 0;
                     // Update the data-fraction text content
-                    fractionElements[index].textContent = newFraction > 0 ? newFraction.toFixed(2).replace(/\.00$/, "") : " "; // Remove unnecessary decimals and convert to a string
+                    fractionElements[index].textContent = newFraction > 0 ? newFraction.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
                     break;
 
                 /* default: // imperial or default

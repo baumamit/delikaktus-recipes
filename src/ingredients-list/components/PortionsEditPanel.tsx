@@ -27,6 +27,8 @@ export default function PortionsEditPanel({ promptText, portionsMode, portions, 
         type="number"
         onChange={(e) => handlePortionsChange(e)}
         value={portions}
+        min="0"
+        max="100"
         className="delikaktus-recipes-ingredients-list-portions-input-amount"
       />
     </div>

@@ -26,17 +26,17 @@ wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', $attrib
 
 // Define a mapping between numeric values and their fraction symbols
 $fractionMap = [
-    "0.5"   => "½",
-    "0.33"  => "⅓",
-    "0.25"  => "¼",
-    "0.2"   => "⅕",
-    "0.166" => "⅙",
     "0.125" => "⅛",
-    "0.66"  => "⅔",
-    "0.4"   => "⅖",
+    "0.166" => "⅙",
+    "0.2"   => "⅕",
+    "0.25"  => "¼",
+    "0.33"  => "⅓",
     "0.375" => "⅜",
-    "0.75"  => "¾",
+    "0.4"   => "⅖",
+    "0.5"   => "½",
     "0.625" => "⅝",
+    "0.66"  => "⅔",
+    "0.75"  => "¾",
     "0.875" => "⅞"
 ];
 ?>
@@ -44,7 +44,7 @@ $fractionMap = [
 <div <?php echo get_block_wrapper_attributes(); ?>>
     <div class="delikaktus-recipes-portions-box">
         <span class="delikaktus-recipes-portions-box-prompt">
-            <?php echo __("How many portions would you like to make?", 'delikaktus-recipes'); ?>
+            <?php echo __("For how many portions is this recipe?", 'delikaktus-recipes'); ?>
         </span>
 
         <input
@@ -52,7 +52,8 @@ $fractionMap = [
             class="delikaktus-recipes-portions-box-input"
             value="<?php echo esc_html($portionsAmount); ?>"
             min="0"
-            step="<?php echo ($portionsAmount > 1) ? '1' :  '0.1'; ?>"
+            step="<?php echo ($portionsAmount > 1) ? '1' :  '0.5'; ?>"
+            aria-live="assertive"
         />
     </div>
 
@@ -69,22 +70,30 @@ $fractionMap = [
                 $quantityFractionSymbol = $fractionMap[$quantityFractionValue] ?? "";
                 ?>
                 <label class="delikaktus-recipes-ingredient-item">
-                    <input type="checkbox" class="delikaktus-recipes-ingredients-list-checkbox">
+                    <input type="checkbox"
+                        class="delikaktus-recipes-ingredients-list-checkbox"
+                        aria-label="Checkbox for ingredient: <?php echo $name; ?>"
+                        aria-live="polite"
+                    >
                     <span class="delikaktus-recipes-ingredients-list-checkbox-custom"></span>
 
-                    <span class="ingredient-quantity" data-quantity="<?php echo $quantity; ?>">
+                    <span class="ingredient-quantity"
+                        aria-live="polite"
+                        data-quantity="<?php echo $quantity; ?>">
                         <?php echo ($quantity > 0) ? $quantity : ''; ?>
                     </span>
 
-                    <span class="ingredient-quantity-fraction" data-quantity-fraction="<?php echo $quantityFractionValue; ?>">
-                        <?php echo $quantityFractionSymbol; ?>
+                    <span class="ingredient-quantity-fraction" 
+                        aria-live="polite"
+                        data-quantity-fraction="<?php echo $quantityFractionValue; ?>">
+                        <?php echo $quantityFractionSymbol ? $quantityFractionSymbol : ""; ?>
                     </span>
 
-                    <span class="ingredient-unit-choice">
+                    <span class="ingredient-unit-choice" aria-live="polite">
                         <?php echo $unitChoice; ?>
                     </span>
 
-                    <span class="ingredient-name">
+                    <span class="ingredient-name" aria-live="polite">
                         <?php echo $name; ?>
                     </span>
                 </label>

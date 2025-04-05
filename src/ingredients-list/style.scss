@@ -6,6 +6,7 @@
  */
 
  .wp-block-delikaktus-recipes-ingredients-list {
+    font-family: inherit; /* Or another system font */
     background-color: inherit;
     color: inherit;
     margin: 0;
@@ -21,6 +22,20 @@
     flex-wrap: wrap;  /* Allows wrapping if space is limited */
     align-items: center; /* Vertically center the elements */
 }
+
+/* For smaller screens */
+@media (max-width: 768px) {
+    .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-item:hover {
+    background-color: rgba(255, 247, 95, 0.3);  /* Light background on hover */
+    cursor: pointer;
+}
+
 
 .wp-block-delikaktus-recipes-ingredients-list 
 :is(.ingredient-quantity-fraction, .ingredient-unit-choice) {
@@ -38,6 +53,11 @@
     cursor: pointer;
     background-color: var(--wp--preset--color--background, var(--wp--preset--color--base, white)); /* Default background */
     margin-right: 0.5rem;
+}
+
+/* For screen readers */
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox:focus {
+    outline: 2px solid var(--wp--preset--color--primary);
 }
 
 /* Custom checkmark and background color when checked */
@@ -60,4 +80,5 @@
     color: var(--wp--preset--color--text, var(--wp--preset--color--contrast, black));
     opacity: 0.6; /* Makes it appear lighter */
     text-decoration: line-through var(--wp--preset--color--tertiary);
+    text-decoration-color: var(--wp--preset--color--tertiary);  /* Ensures line-through color is distinct */
 }
