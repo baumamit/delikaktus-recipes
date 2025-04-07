@@ -6,20 +6,31 @@
     "license": "GPL-2.0-or-later",
     "main": "build/index.js",
     "scripts": {
-        "build": "wp-scripts build --webpack-copy-php",
+        "build": "webpack --config webpack.build.config.js && node generate-block-json.js",
+        "start": "webpack serve --config webpack.start.config.js",
         "format": "wp-scripts format",
         "lint:css": "wp-scripts lint-style",
         "lint:js": "wp-scripts lint-js",
         "packages-update": "wp-scripts packages-update",
         "plugin-zip": "wp-scripts plugin-zip",
-        "start": "wp-scripts start --webpack-copy-php",
         "build-css": "wp-scripts build",
         "start-css": "wp-scripts start"
     },
     "devDependencies": {
-        "@wordpress/scripts": "^30.12.0"
+        "@babel/preset-env": "^7.26.9",
+        "@babel/preset-react": "^7.26.3",
+        "@babel/preset-typescript": "^7.27.0",
+        "@wordpress/scripts": "^30.12.0",
+        "babel-loader": "^10.0.0",
+        "copy-webpack-plugin": "^13.0.0",
+        "css-loader": "^7.1.2",
+        "style-loader": "^4.0.0",
+        "webpack-bundle-analyzer": "^4.10.2"
     },
     "dependencies": {
+        "@wordpress/block-editor": "^14.16.0",
+        "@wordpress/blocks": "^14.10.0",
+        "@wordpress/components": "^29.7.0",
         "react-icons": "^5.5.0"
     }
 }

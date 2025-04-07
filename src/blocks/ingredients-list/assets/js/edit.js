@@ -29,7 +29,7 @@ import { IoIosArrowUp as IconArrowUp, IoIosArrowDown as IconArrowDown } from "re
 /**
  * Import custom components
  */
-import PortionsEditPanel from "./components/PortionsEditPanel";
+import PortionsEditPanel from "../../components/PortionsEditPanel";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -37,7 +37,8 @@ import PortionsEditPanel from "./components/PortionsEditPanel";
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-import './editor.scss';
+// Development path,Webpack converts this to the path '../css/editor.css' relative to this file in the build folder
+import '../scss/edit.scss';
 
 /**
  * The edit function describes the structure of your block in the context of the

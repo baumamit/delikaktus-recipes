@@ -24,6 +24,8 @@
 /* console.log( 'Hello World! (from create-block-recipe-editor block)' ); */
 /* eslint-enable no-console */
 
+import '../scss/view.scss'; // Ensure this imports the frontend styles
+
 document.addEventListener("DOMContentLoaded", function() {
     const portionsInput = document.querySelector(".delikaktus-recipes-portions-box-input");
     const ingredientQuantities = document.querySelectorAll(".ingredient-quantity");

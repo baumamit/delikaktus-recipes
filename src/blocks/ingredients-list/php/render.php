@@ -15,7 +15,7 @@ $portionsAmount = isset($attributes['portionsAmount']) ? $attributes['portionsAm
 // Enqueue your frontend JavaScript file
 wp_enqueue_script(
     'delikaktus-recipes-frontend-js',
-    plugin_dir_url(__FILE__) . 'view.js',
+    plugin_dir_url(__FILE__) . './assets/js/view.js', // Path set in webpack.config.js
     array('jquery'),
     '1.0',
     true  // Load script in the footer
@@ -27,7 +27,6 @@ wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', $attrib
 // Define a mapping between numeric values and their fraction symbols
 $fractionMap = [
     "0.125" => "⅛",
-    "0.166" => "⅙",
     "0.2"   => "⅕",
     "0.25"  => "¼",
     "0.33"  => "⅓",
@@ -75,27 +74,29 @@ $fractionMap = [
                         aria-label="Checkbox for ingredient: <?php echo $name; ?>"
                         aria-live="polite"
                     >
-                    <span class="delikaktus-recipes-ingredients-list-checkbox-custom"></span>
+                    <!-- <span class="delikaktus-recipes-ingredients-list-checkbox-custom"></span> -->
 
-                    <span class="ingredient-quantity"
-                        aria-live="polite"
-                        data-quantity="<?php echo $quantity; ?>">
-                        <?php echo ($quantity > 0) ? $quantity : ''; ?>
-                    </span>
+                    <div class="delikaktus-recipes-ingredients-list-ingredient-text">
+                        <span class="ingredient-quantity"
+                            aria-live="polite"
+                            data-quantity="<?php echo $quantity; ?>">
+                            <?php echo ($quantity > 0) ? $quantity : ''; ?>
+                        </span>
 
-                    <span class="ingredient-quantity-fraction" 
-                        aria-live="polite"
-                        data-quantity-fraction="<?php echo $quantityFractionValue; ?>">
-                        <?php echo $quantityFractionSymbol ? $quantityFractionSymbol : ""; ?>
-                    </span>
+                        <span class="ingredient-quantity-fraction" 
+                            aria-live="polite"
+                            data-quantity-fraction="<?php echo $quantityFractionValue; ?>">
+                            <?php echo $quantityFractionSymbol ? $quantityFractionSymbol : ""; ?>
+                        </span>
 
-                    <span class="ingredient-unit-choice" aria-live="polite">
-                        <?php echo $unitChoice; ?>
-                    </span>
+                        <span class="ingredient-unit-choice" aria-live="polite">
+                            <?php echo $unitChoice; ?>
+                        </span>
 
-                    <span class="ingredient-name" aria-live="polite">
-                        <?php echo $name; ?>
-                    </span>
+                        <span class="ingredient-name" aria-live="polite">
+                            <?php echo $name; ?>
+                        </span>
+                    </div>
                 </label>
             <?php endforeach;
         endif; ?>

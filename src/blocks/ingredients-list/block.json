@@ -30,9 +30,10 @@
         "html": false
     },
     "example": {},
-    "editorScript": "file:./index.js",
-    "editorStyle": "file:./index.css",
-    "style": "file:./style-index.css",
-    "render": "file:./render.php",
-    "viewScript": "file:./view.js"
+    "editorScript": "file:./assets/js/delikaktus-recipes-ingredients-list-edit.js",
+    "editorStyle": "file:./assets/css/delikaktus-recipes-ingredients-list-edit.css",
+    "style": "file:./delikaktus-recipes-ingredients-list-index.css",
+    "render": "file:./php/delikaktus-recipes-ingredients-list-render.php",
+    "viewScript": "file:./assets/js/delikaktus-recipes-ingredients-list-view.js",
+    "viewStyle": "file:./assets/css/delikaktus-recipes-ingredients-list-view.css"
 }
