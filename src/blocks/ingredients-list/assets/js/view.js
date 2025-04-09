@@ -27,9 +27,17 @@
 import '../scss/view.scss'; // Ensure this imports the frontend styles
 
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("DOMContentLoaded event fired"); // Debugging log
+
     const portionsInput = document.querySelector(".delikaktus-recipes-portions-box-input");
     const ingredientQuantities = document.querySelectorAll(".ingredient-quantity");
     const fractionElements = document.querySelectorAll(".ingredient-quantity-fraction");
+
+    // Exit if no elements are found
+    if (ingredientQuantities.length === 0 && fractionElements.length === 0) {
+        console.warn("No ingredient quantities or fraction elements found."); // Debugging log
+        return; // Exit the script
+    }
 
     // Store initial values
     const originalQuantities = Array.from(ingredientQuantities).map(el => parseFloat(el.dataset.quantity));
@@ -38,95 +46,97 @@ document.addEventListener("DOMContentLoaded", function() {
     const unitSystem = recipeEditorData.unitSystem;  // From localized PHP data
     const portionsAmount = parseFloat(recipeEditorData.portions) || 1;// From localized PHP data
 
-    portionsInput.addEventListener("input", function() {
-        let portionsRatio = parseFloat(this.value) / portionsAmount;
-        // Set default ratio if the input is invalid
-        if (isNaN(portionsRatio) || portionsRatio <= 0) {
-            portionsRatio = 1;
-        }
+    if (portionsInput) {
+        portionsInput.addEventListener("input", function() {
+            let portionsRatio = parseFloat(this.value) / portionsAmount;
+            // Set default ratio if the input is invalid
+            if (isNaN(portionsRatio) || portionsRatio <= 0) {
+                portionsRatio = 1;
+            }
 
-        ingredientQuantities.forEach((el, index) => {
-            const newSum = (parseFloat(originalQuantities[index]) + parseFloat(originalFractions[index])) * portionsRatio;
-            const unitType = el.dataset.unitType;
+            ingredientQuantities.forEach((el, index) => {
+                const newSum = (parseFloat(originalQuantities[index]) + parseFloat(originalFractions[index])) * portionsRatio;
+                const unitType = el.dataset.unitType;
 
-            let newQuantity = originalQuantities[index];
-            let newFraction = originalFractions[index];
-            let roundedNewSum = 0;
+                let newQuantity = originalQuantities[index];
+                let newFraction = originalFractions[index];
+                let roundedNewSum = 0;
 
-            switch (unitSystem) {
-                case "metric":
-                    if ((unitType === 'mass') || (unitType === 'volume')) {
-                        if (newSum < 20) {
-                            newQuantity = Math.round(newSum); // Round to the closest unit
-                        } else if (newSum < 500) {
-                            newQuantity = Math.round(newSum / 5) * 5; // Round to the nearest 5 units
-                        } else if (newSum < 1000) {
-                            newQuantity = Math.round(newSum / 10) * 10; // Round to the nearest 10 units
-                        } else if (newSum >= 1000) {
-                            newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 units
-                        }
-                    } else { // unitType is tool or by the eye
-                        if (newSum < 0.95) {
-                            roundedNewSum = Math.round(newSum * 12) / 12; // Round to the closest t
-                        } else if (newSum < 2) {
-                            roundedNewSum = Math.round(newSum * 4) / 4; // Round to the closest quarter of a unit
-                        } else if (newSum < 10) {
-                            roundedNewSum = Math.round(newSum * 2) / 2; // Round to the closest half of a unit
-                        } else if (newSum < 20) {
-                            roundedNewSum = Math.round(newSum); // Round to the closest unit
-                        } else if (newSum < 500) {
-                            roundedNewSum = Math.round(newSum / 5) * 5; // Round to the closest 5 units
-                        } else if (newSum < 1000) {
-                            roundedNewSum = Math.round(newSum / 10) * 10; // Round to the closest 10 units
-                        } else if (newSum >= 1000) {
-                            roundedNewSum = Math.round(newSum / 25) * 25; // Round to the closest 25 units
-                        }
-                        newFraction = roundedNewSum % 1;
-                        newQuantity = Math.floor(roundedNewSum);
-                }
-                    // Update the data-quantity attribute value to keep the total quantity with the fractions
-                    el.dataset.quantity = newSum;
-                    // Update the data-quantity text content
-                    el.textContent = newQuantity > 0 ? newQuantity.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
-                    // Update the data-fraction attribute value
-                    fractionElements[index].dataset.quantityFraction = 0;
-                    // Update the data-fraction text content
-                    fractionElements[index].textContent = newFraction > 0 ? newFraction.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
-                    break;
-
-                /* default: // imperial or default
-                    if (newSum <= 1) {
-                        newQuantity = Math.round(newSum * 12) / 12; // Round to the nearest 12th
-                    } else if (newSum < 2) {
-                        newQuantity = Math.round(newSum * 4) / 4; // Round to the nearest quarter
-                    } else if (newSum < 5) {
-                        newQuantity = Math.round(newSum * 2) / 2; // Round to the nearest half
-                    } else if (newSum < 10) {
-                        newQuantity = Math.round(newSum); // Round to the closest g
-                    } else if (newSum < 100) {
-                        newQuantity = Math.round(newSum / 5) * 5; // Round to the nearest 5 g
-                    } else if (newSum < 200) {
-                        newQuantity = Math.round(newSum / 10) * 10; // Round to the nearest 10 g
-                    } else if (newSum < 500) {
-                        newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 g
-                    } else if (newSum < 1000) {
-                        newQuantity = Math.round(newSum / 50) * 50; // Round to the nearest 50 g
-                    } else {
-                        newQuantity = Math.round(newSum / 100) * 100; // Round to the nearest 100 g
+                switch (unitSystem) {
+                    case "metric":
+                        if ((unitType === 'mass') || (unitType === 'volume')) {
+                            if (newSum < 20) {
+                                newQuantity = Math.round(newSum); // Round to the closest unit
+                            } else if (newSum < 500) {
+                                newQuantity = Math.round(newSum / 5) * 5; // Round to the nearest 5 units
+                            } else if (newSum < 1000) {
+                                newQuantity = Math.round(newSum / 10) * 10; // Round to the nearest 10 units
+                            } else if (newSum >= 1000) {
+                                newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 units
+                            }
+                        } else { // unitType is tool or by the eye
+                            if (newSum < 0.95) {
+                                roundedNewSum = Math.round(newSum * 12) / 12; // Round to the closest t
+                            } else if (newSum < 2) {
+                                roundedNewSum = Math.round(newSum * 4) / 4; // Round to the closest quarter of a unit
+                            } else if (newSum < 10) {
+                                roundedNewSum = Math.round(newSum * 2) / 2; // Round to the closest half of a unit
+                            } else if (newSum < 20) {
+                                roundedNewSum = Math.round(newSum); // Round to the closest unit
+                            } else if (newSum < 500) {
+                                roundedNewSum = Math.round(newSum / 5) * 5; // Round to the closest 5 units
+                            } else if (newSum < 1000) {
+                                roundedNewSum = Math.round(newSum / 10) * 10; // Round to the closest 10 units
+                            } else if (newSum >= 1000) {
+                                roundedNewSum = Math.round(newSum / 25) * 25; // Round to the closest 25 units
+                            }
+                            newFraction = roundedNewSum % 1;
+                            newQuantity = Math.floor(roundedNewSum);
                     }
+                        // Update the data-quantity attribute value to keep the total quantity with the fractions
+                        el.dataset.quantity = newSum;
+                        // Update the data-quantity text content
+                        el.textContent = newQuantity > 0 ? newQuantity.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
+                        // Update the data-fraction attribute value
+                        fractionElements[index].dataset.quantityFraction = 0;
+                        // Update the data-fraction text content
+                        fractionElements[index].textContent = newFraction > 0 ? newFraction.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
+                        break;
 
-                    fractionElements[index].textContent = originalFractions[index];
+                    /* default: // imperial or default
+                        if (newSum <= 1) {
+                            newQuantity = Math.round(newSum * 12) / 12; // Round to the nearest 12th
+                        } else if (newSum < 2) {
+                            newQuantity = Math.round(newSum * 4) / 4; // Round to the nearest quarter
+                        } else if (newSum < 5) {
+                            newQuantity = Math.round(newSum * 2) / 2; // Round to the nearest half
+                        } else if (newSum < 10) {
+                            newQuantity = Math.round(newSum); // Round to the closest g
+                        } else if (newSum < 100) {
+                            newQuantity = Math.round(newSum / 5) * 5; // Round to the nearest 5 g
+                        } else if (newSum < 200) {
+                            newQuantity = Math.round(newSum / 10) * 10; // Round to the nearest 10 g
+                        } else if (newSum < 500) {
+                            newQuantity = Math.round(newSum / 25) * 25; // Round to the nearest 25 g
+                        } else if (newSum < 1000) {
+                            newQuantity = Math.round(newSum / 50) * 50; // Round to the nearest 50 g
+                        } else {
+                            newQuantity = Math.round(newSum / 100) * 100; // Round to the nearest 100 g
+                        }
 
-                    break; */
+                        fractionElements[index].textContent = originalFractions[index];
+
+                        break; */
+                }
+            });
+
+            
+            // Update the step based on the current value
+            if (parseFloat(this.value) > 1) {
+                this.step = '1';
+            } else {
+                this.step = '0.125';
             }
         });
-
-        
-        // Update the step based on the current value
-        if (parseFloat(this.value) > 1) {
-            this.step = '1';
-        } else {
-            this.step = '0.125';
-        }
-    });
+    }
 });

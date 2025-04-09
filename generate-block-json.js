@@ -9,8 +9,9 @@ blockSlugs.forEach((blockSlug) => {
         "apiVersion": 3,
         "name": `${pluginSlug}/${blockSlug}`,
         "version": "0.1.0",
-        "title": "Recipe Ingredients List",
+        "title": "Ingredients List",
         "category": "widgets",
+        "icon": "list-view",
         "description": "Dynamic ingredients list for recipe posts, created by the DELIKAKTUS.com team.",
         "textdomain": pluginSlug,
         "attributes": {
@@ -21,6 +22,7 @@ blockSlugs.forEach((blockSlug) => {
                 "items": {
                     "type": "object",
                     "properties": {
+                        "id": { "type": "string" },
                         "unitType": { "type": "string", "default": "mass" },
                         "quantity": { "type": "number", "default": 1 },
                         "quantityFraction": { "type": "number", "default": 0 },
@@ -35,13 +37,35 @@ blockSlugs.forEach((blockSlug) => {
         "supports": {
             "html": false
         },
-        "example": {},
-        "editorScript": `file:./assets/js/${pluginSlug}-${blockSlug}-edit.js`,
-        "editorStyle": `file:./assets/css/${pluginSlug}-${blockSlug}-edit.css`,
-        "style": `file:./${pluginSlug}-${blockSlug}-index.css`,
-        "render": `file:./php/${pluginSlug}-${blockSlug}-render.php`,
-        "viewScript": `file:./assets/js/${pluginSlug}-${blockSlug}-view.js`,
-        "viewStyle": `file:./assets/css/${pluginSlug}-${blockSlug}-view.css`
+        "example": {
+            "attributes": {
+                "unitSystem": "metric",
+                "ingredients": [
+                    {
+                        "id": "example-id-1",
+                        "unitType": "mass",
+                        "quantity": 1,
+                        "quantityFraction": 0.5,
+                        "unitChoice": "g",
+                        "name": "salt"
+                    },
+                    {
+                        "id": "example-id-2",
+                        "unitType": "volume",
+                        "quantity": 10,
+                        "quantityFraction": 0,
+                        "unitChoice": "ml",
+                        "name": "water"
+                    }
+                ],
+                "portionsMode": true,
+                "portionsAmount": 4
+            }
+        },
+        "editorScript": `file:./${pluginSlug}-${blockSlug}-index.js`,
+        "editorStyle": `file:./${pluginSlug}-${blockSlug}-index.css`,
+        "script": `file:./assets/js/${pluginSlug}-${blockSlug}-view.js`,
+        "style": `file:./assets/css/${pluginSlug}-${blockSlug}-view.css`
     };
 
     // Ensure the target directory exists

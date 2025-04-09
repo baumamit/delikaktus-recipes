@@ -13,13 +13,13 @@ import { LuCookingPot } from 'react-icons/lu'; // Import the icon
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-import './index.scss';  // Block-specific SCSS/CSS
+//import './index.scss';  // Block-specific SCSS/CSS
 
 /**
  * Internal dependencies
  */
 import Edit from './assets/js/edit.js';  // Editor JS for the block
-import './assets/js/view.js';     // Frontend JS for the block
+//import './assets/js/view.js';     // Frontend JS for the block
 import metadata from './block.json'; // Block metadata
 
 /**
@@ -27,11 +27,11 @@ import metadata from './block.json'; // Block metadata
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-console.log("import metadata from './block.json'; // Block metadata",metadata.name) ;
+console.log("import metadata from './block.json'; // Block metadata",metadata.name);
 
 registerBlockType(metadata.name, {
     /**
-     * @see ./assets/js/edit.js
+     * @see ./index.js
      */
     icon: LuCookingPot,
     edit: Edit,

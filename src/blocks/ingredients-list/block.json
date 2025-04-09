@@ -3,8 +3,9 @@
     "apiVersion": 3,
     "name": "delikaktus-recipes/ingredients-list",
     "version": "0.1.0",
-    "title": "Recipe Ingredients List",
+    "title": "Ingredients List",
     "category": "widgets",
+    "icon": "list-view",
     "description": "Dynamic ingredients list for recipe posts, created by the DELIKAKTUS.com team.",
     "textdomain": "delikaktus-recipes",
     "attributes": {
@@ -15,6 +16,7 @@
             "items": {
                 "type": "object",
                 "properties": {
+                    "id": { "type": "string" },
                     "unitType": { "type": "string", "default": "mass" },
                     "quantity": { "type": "number", "default": 1 },
                     "quantityFraction": { "type": "number", "default": 0 },
@@ -29,11 +31,33 @@
     "supports": {
         "html": false
     },
-    "example": {},
-    "editorScript": "file:./assets/js/delikaktus-recipes-ingredients-list-edit.js",
-    "editorStyle": "file:./assets/css/delikaktus-recipes-ingredients-list-edit.css",
-    "style": "file:./delikaktus-recipes-ingredients-list-index.css",
-    "render": "file:./php/delikaktus-recipes-ingredients-list-render.php",
-    "viewScript": "file:./assets/js/delikaktus-recipes-ingredients-list-view.js",
-    "viewStyle": "file:./assets/css/delikaktus-recipes-ingredients-list-view.css"
+    "example": {
+        "attributes": {
+            "unitSystem": "metric",
+            "ingredients": [
+                {
+                    "id": "example-id-1",
+                    "unitType": "mass",
+                    "quantity": 1,
+                    "quantityFraction": 0.5,
+                    "unitChoice": "g",
+                    "name": "salt"
+                },
+                {
+                    "id": "example-id-2",
+                    "unitType": "volume",
+                    "quantity": 10,
+                    "quantityFraction": 0,
+                    "unitChoice": "ml",
+                    "name": "water"
+                }
+            ],
+            "portionsMode": true,
+            "portionsAmount": 4
+        }
+    },
+    "editorScript": "file:./delikaktus-recipes-ingredients-list-index.js",
+    "editorStyle": "file:./delikaktus-recipes-ingredients-list-index.css",
+    "script": "file:./assets/js/delikaktus-recipes-ingredients-list-view.js",
+    "style": "file:./assets/css/delikaktus-recipes-ingredients-list-view.css"
 }

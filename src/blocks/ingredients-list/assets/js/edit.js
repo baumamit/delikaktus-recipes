@@ -40,6 +40,12 @@ import PortionsEditPanel from "../../components/PortionsEditPanel";
 // Development path,Webpack converts this to the path '../css/editor.css' relative to this file in the build folder
 import '../scss/edit.scss';
 
+// To Generate a Unique ID for Each Ingredient
+import { v4 as uuidv4 } from 'uuid'; // Import uuid library
+
+// Add a useEffect to assign IDs If there are existing ingredients without an id
+import { useEffect } from 'react';
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -170,11 +176,15 @@ export default function Edit(props) {
         portionsMode = false,
         portionsAmount = 1
     } = attributes;
-
-    /* useEffect(() => {
-        // You can also set state here or trigger any other effects needed
-      }, [attributes]); // This effect will run when portionsMode changes */
     
+    // Add a useEffect to assign IDs If there are existing ingredients without an id
+    useEffect(() => {
+        const updatedIngredients = ingredients.map((ingredient) =>
+            ingredient.id ? ingredient : { ...ingredient, id: uuidv4() }
+        );
+        setAttributes({ ingredients: updatedIngredients });
+    }, [ingredients, setAttributes]);
+
     // Function to toggle between unit systems
     const toggleUnitSystem = () => {
         const nextUnitSystem = {
@@ -224,6 +234,7 @@ export default function Edit(props) {
             ingredients: [
                 ...ingredients,
                 {
+                    id: uuidv4(), // Add a unique ID
                     unitType: defaultUnitType,
                     quantity: defaultQuantity,
                     quantityFraction: defaultQuantityFraction,
@@ -325,7 +336,7 @@ export default function Edit(props) {
                     || (unitSystem === UnitSystem.DEFAULT && ingredient.unitType === UnitType.TOOL);
 
                     return (
-                        <div key={index} className="delikaktus-recipes-ingredient-item">
+                        <div key={ingredient.id} className="delikaktus-recipes-ingredient-item">
                             <div className='delikaktus-recipes-ingredient-arrows'>
                                 {/* Button to move ingredient up in the list */}
                                 <button
@@ -402,8 +413,8 @@ export default function Edit(props) {
                                         aria-label="Select measurement unit"
                                         title='Select measurement unit'
                                     >
-                                        {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
-                                            <option key={i} value={option}>{getTranslation(option)}</option>
+                                        {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option) => (
+                                            <option key={option} value={option}>{getTranslation(option)}</option>
                                         ))}
                                     </select>
                                 )}
@@ -440,7 +451,7 @@ export default function Edit(props) {
                 className='delikaktus-recipes-ingredient-add'
                 aria-label='Add ingredient'
                 title='Add ingredient'
-                disabled={ingredients.length >= 200} // Disable if already 20 ingredients
+                disabled={ingredients.length >= 50} // Disable if already 50 ingredients
             >
                 <IconAdd />
             </button>

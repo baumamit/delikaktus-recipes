@@ -12,10 +12,13 @@ $attributes = isset($attributes) ? $attributes : []; // Ensure $attributes is de
 $unitSystem = isset($attributes['unitSystem']) ? $attributes['unitSystem'] : 'metric'; // Default to 'metric' if not set
 $portionsAmount = isset($attributes['portionsAmount']) ? $attributes['portionsAmount'] : 1;  // Default to 1 portion if not set
 
+// Check the debug.log file in wp-content to verify that the attributes are being passed correctly
+error_log(print_r($attributes, true));
+
 // Enqueue your frontend JavaScript file
 wp_enqueue_script(
     'delikaktus-recipes-frontend-js',
-    plugin_dir_url(__FILE__) . './assets/js/view.js', // Path set in webpack.config.js
+    plugin_dir_url(__FILE__) . 'assets/js/view.js', // Path set in webpack.config.js
     array('jquery'),
     '1.0',
     true  // Load script in the footer
