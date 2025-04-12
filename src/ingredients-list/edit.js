@@ -48,6 +48,8 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 
+console.log("edit.js loaded\n");
+
 // Enum-like object to represent unit system modes
 const UnitSystem = {
     DEFAULT: "default",

@@ -21,6 +21,9 @@ import './style.scss';
 import Edit from './edit';
 import metadata from './block.json';
 
+console.log("index.js loaded\n");
+
+
 /**
  * Every block starts by registering a new block type definition.
  *
@@ -30,6 +33,6 @@ registerBlockType(metadata.name, {
     /**
      * @see ./edit.js
      */
-    icon: LuCookingPot,
     edit: Edit,
+    icon: LuCookingPot,
 });
