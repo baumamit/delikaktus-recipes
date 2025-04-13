@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "delikaktus-recipes/ingredients-list",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "title": "Recipe Ingredients List",
     "category": "widgets",
     "description": "Dynamic ingredients list for recipe posts, created by the DELIKAKTUS.com team.",
@@ -15,6 +15,7 @@
             "items": {
                 "type": "object",
                 "properties": {
+                    "id": { "type": "string" },
                     "unitType": { "type": "string", "default": "mass" },
                     "quantity": { "type": "number", "default": 1 },
                     "quantityFraction": { "type": "number", "default": 0 },

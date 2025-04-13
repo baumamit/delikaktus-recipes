@@ -21,6 +21,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Registers the settings page for the plugin.
+ * Adds the DELIKAKTUS Recipes Settings page to the WordPress admin menu.
+ * @since 0.1.0
+ */
+function adminSettingsPage() {
+    add_options_page(
+        'DELIKAKTUS Recipes Settings',
+        'DELIKAKTUS Recipes',
+        'manage_options',
+        'delikaktus-recipes-settings',
+        'delikaktus_recipes_settings_create_page'
+    );
+}
+add_action('admin_menu', 'adminSettingsPage');
+
+function delikaktus_recipes_settings_create_page() {
+    echo '<h1>DELIKAKTUS Recipes Settings</h1>';
+    echo '<p>This is the settings page for DELIKAKTUS Recipes.</p>';
+}
+
+/**
  * Registers the block using the metadata loaded from the `block.json` file.
  * Behind the scenes, it registers also all assets so they can be enqueued
  * through the block editor in the corresponding context.
@@ -31,6 +52,25 @@ function create_block_delikaktus_recipes_block_init() {
     register_block_type( __DIR__ . '/build/ingredients-list' );
 }
 add_action( 'init', 'create_block_delikaktus_recipes_block_init' );
+
+/**
+ * Define the fractions list with symbols and corresponding values.
+ * This can be accessed from both the backend and frontend.
+ */
+function delikaktus_get_fraction_list() {
+    return array(
+        '1/8'   => 0.125,
+        '1/4'   => 0.25,
+        '1/3'   => 0.3333,
+        '3/8'   => 0.375,
+        '1/2'   => 0.5,
+        '5/8'   => 0.625,
+        '2/3'   => 0.6667,
+        '3/4'   => 0.75,
+        '7/8'   => 0.875,
+        '1'     => 1,
+    );
+}
 
 /**
  * Enqueues the necessary scripts and localizes the current language for use in JavaScript.

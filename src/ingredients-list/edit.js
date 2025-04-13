@@ -37,7 +37,13 @@ import PortionsEditPanel from "./components/PortionsEditPanel";
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
+// Development path,Webpack converts this to the path '../css/editor.css' relative to this file in the build folder
 import './editor.scss';
+
+// To Generate a Unique ID for Each Ingredient
+import { v4 as uuidv4 } from 'uuid'; // Import uuid library
+// useMemo to optimize re-renders of uuid
+import { useMemo } from 'react';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -63,11 +69,6 @@ const UnitType = {
     TOOL: "tool",
 };
 
-/* 
-[UnitType.MASS]: ["g", "kg", "grams", "kilograms"],
-[UnitType.VOLUME]: ["ml", "l", "L", "milliliters", "liter", "liters", "Liter", "Liters"],
-[UnitType.TOOL]: ["cup", "cups", "tsp", "tsps", "teaspoon", "tablespoons", "Tbsp", "Tbsps", "teaspoons", "tablespoon"],
-*/
 // Unit options based on unit system and type
 const unitOptions = {
     [UnitSystem.METRIC]: {
@@ -92,17 +93,14 @@ const unitOptions = {
 
 const fractionOptions = [
     { value: 0, label: '' },
-    { value: 0.5, label: '½' },
-    { value: 0.33, label: '⅓' },
-    { value: 0.25, label: '¼' },
-    { value: 0.2, label: '⅕' },
-    { value: 0.166, label: '⅙' },
     { value: 0.125, label: '⅛' },
-    { value: 0.66, label: '⅔' },
-    { value: 0.4, label: '⅖' },
+    { value: 0.25, label: '¼' },
+    { value: 0.33, label: '⅓' },
     { value: 0.375, label: '⅜' },
-    { value: 0.75, label: '¾' },
+    { value: 0.5, label: '½' },
     { value: 0.625, label: '⅝' },
+    { value: 0.66, label: '⅔' },
+    { value: 0.75, label: '¾' },
     { value: 0.875, label: '⅞' },
 ];
 
@@ -170,10 +168,26 @@ export default function Edit(props) {
         portionsAmount = 1
     } = attributes;
 
-    /* useEffect(() => {
-        // You can also set state here or trigger any other effects needed
-      }, [attributes]); // This effect will run when portionsMode changes */
-    
+    // useMemo to optimize re-renders of uuid
+    const generateUuid = useMemo(() => {
+        return () => uuidv4() || `fallback-${Date.now()}-${Math.random()}`;
+    }, []);
+
+    let hasUpdates = false;
+
+    // Check if any ingredient is missing an ID
+    const updatedIngredients = ingredients.map((ingredient) => {
+        if (!ingredient.id) {
+            hasUpdates = true;
+            return { ...ingredient, id: generateUuid() }; // Create and memorize a unique ID
+        }
+        return ingredient;
+    });
+
+    if (hasUpdates) {
+        setAttributes({ ingredients: updatedIngredients });
+    }
+
     // Function to toggle between unit systems
     const toggleUnitSystem = () => {
         const nextUnitSystem = {
@@ -223,6 +237,7 @@ export default function Edit(props) {
             ingredients: [
                 ...ingredients,
                 {
+                    id: generateUuid(), // Create and memorize a unique ID
                     unitType: defaultUnitType,
                     quantity: defaultQuantity,
                     quantityFraction: defaultQuantityFraction,
@@ -324,7 +339,7 @@ export default function Edit(props) {
                     || (unitSystem === UnitSystem.DEFAULT && ingredient.unitType === UnitType.TOOL);
 
                     return (
-                        <div key={index} className="delikaktus-recipes-ingredient-item">
+                        <div key={ingredient.id} className="delikaktus-recipes-ingredient-item">
                             <div className='delikaktus-recipes-ingredient-arrows'>
                                 {/* Button to move ingredient up in the list */}
                                 <button
@@ -401,8 +416,8 @@ export default function Edit(props) {
                                         aria-label="Select measurement unit"
                                         title='Select measurement unit'
                                     >
-                                        {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option, i) => (
-                                            <option key={i} value={option}>{getTranslation(option)}</option>
+                                        {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option) => (
+                                            <option key={option} value={option}>{getTranslation(option)}</option>
                                         ))}
                                     </select>
                                 )}
@@ -439,7 +454,7 @@ export default function Edit(props) {
                 className='delikaktus-recipes-ingredient-add'
                 aria-label='Add ingredient'
                 title='Add ingredient'
-                disabled={ingredients.length >= 200} // Disable if already 20 ingredients
+                disabled={ingredients.length >= 50} // Disable if already 20 ingredients
             >
                 <IconAdd />
             </button>
