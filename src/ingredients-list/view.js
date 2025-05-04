@@ -44,37 +44,44 @@ document.addEventListener("DOMContentLoaded", function() {
     //console.log("DOMContentLoaded event fired"); // Debugging log
 
     const portionsInput = document.querySelector(".delikaktus-recipes-portions-box-input");
-    const ingredientQuantities = document.querySelectorAll(".ingredient-quantity");
+    const quantityElements = document.querySelectorAll(".ingredient-quantity");
     const fractionElements = document.querySelectorAll(".ingredient-quantity-fraction");
 
     // Exit if no elements are found
-    /* if (ingredientQuantities.length === 0 && fractionElements.length === 0) {
+    if (quantityElements.length === 0 && fractionElements.length === 0) {
         console.warn("No ingredient quantities or fraction elements found."); // Debugging log
         return; // Exit the script
-    } */
+    }
 
     // Store initial values
-    const originalQuantities = Array.from(ingredientQuantities).map(el => Number.parseFloat(el.dataset.quantity) || 0);
+    const originalQuantities = Array.from(quantityElements).map(el => Number.parseFloat(el.dataset.quantity) || 0);
     const originalFractions = Array.from(fractionElements).map(el => {
         console.log('el.dataset = ', el.dataset);
         return(Number.parseFloat(el.dataset.quantityFraction) || 0);
     });
+
+
+
     // Retrieve the localized data
     const unitSystem = recipeEditorData.unitSystem;  // From localized PHP data
-    const portionsAmount = Number.parseFloat(recipeEditorData.portions) || 1;// From localized PHP data
-
+    const portionsAmount = Number.parseFloat(recipeEditorData.portionsAmount) || 1;// From localized PHP data
+    console.log("portionsAmount = ", portionsAmount);
+    
     if (portionsInput) {
         portionsInput.addEventListener("input", function() {
+            //console.log("Number.parseFloat(recipeEditorData.portions) = ", Number.parseFloat(recipeEditorData.portions));
             // Set default newPortionsAmount to the same if the input is invalid
-            const newPortionsAmount = Number.parseFloat(this.value) || portionsAmount;
+            const newPortionsAmount = Number.parseFloat(this.value || portionsAmount);
             let portionsRatio = newPortionsAmount / portionsAmount;
-            /* if (isNaN(portionsRatio) || portionsRatio <= 0) {
-                portionsRatio = 1;
-            } */
+            console.log("portionsRatio = ", portionsRatio);
 
-            ingredientQuantities.forEach((ingredientQuantity, index) => {
-                const newSum = (Number.parseFloat(originalQuantities[index]) + Number.parseFloat(originalFractions[index])) * portionsRatio;
-                const unitType = ingredientQuantity.dataset.unitType;
+            quantityElements.forEach((singleQuantityElement, index) => {
+                //console.log("ingredientQuantityElement.dataset.quantity = ", ingredientQuantityElement.dataset.quantity);
+                
+                const originalQuantity = Number.parseFloat(originalQuantities[index]);
+                const originalFraction = Number.parseFloat(originalFractions[index]) || 0;
+                const newSum = (originalQuantity + originalFraction) * portionsRatio;
+                const unitType = singleQuantityElement.dataset.unitType;
 
                 let newQuantity = originalQuantities[index];
                 let newFraction = originalFractions[index];
@@ -113,16 +120,16 @@ document.addEventListener("DOMContentLoaded", function() {
                                 roundedNewSum = Math.round(newSum / 25) * 25; // Round to the closest 25 units
                             }
                             newFraction = roundedNewSum % 1;
-                            newQuantity = Math.floor(roundedNewSum);
                             // Update the data-fraction attribute value
                             fractionElements[index].dataset.quantityFraction = 0;
                             // Update the data-fraction text content as an explicit fraction
                             fractionElements[index].textContent = fractionMap[newFraction] ; // Use the map to get the fraction symbol
                         }
+                        newQuantity = Math.floor(roundedNewSum);
                         // Update the data-quantity attribute value to keep the total quantity with the fractions
-                        ingredientQuantity.dataset.quantity = newSum;
+                        singleQuantityElement.dataset.quantity = newSum;
                         // Update the data-quantity text content
-                        ingredientQuantity.textContent = newQuantity > 0 ? newQuantity.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
+                        singleQuantityElement.textContent = newQuantity > 0 ? newQuantity.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
                         break;
 
                     /* default: // imperial or default
