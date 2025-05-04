@@ -75,15 +75,20 @@ function delikaktus_get_fraction_list() {
 /**
  * Enqueues the necessary scripts and localizes the current language for use in JavaScript.
  */
-function delikaktus_recipes_enqueue_editor_scripts() {
-    $script_path = plugin_dir_path( __FILE__ ) . 'js/edit.js';
+function delikaktus_recipes_enqueue_editor_assets() {
+    $editor_js = plugin_dir_path( __FILE__ ) . 'index.js';
 
-    if ( file_exists( $script_path ) ) {
+    // Log an error if the file is missing
+    if ( ! file_exists( $editor_js ) ) {
+        error_log( 'Editor JS file not found: ' . $editor_js );
+    }
+
+    if ( file_exists( $editor_js ) ) {
         wp_enqueue_script( 
             'delikaktus-recipes-editor-js', 
-            plugin_dir_url( __FILE__ ) . 'js/edit.js', 
+            plugin_dir_url( __FILE__ ) . 'index.js', 
             array('wp-blocks', 'wp-i18n', 'wp-editor'), 
-            '1.0', 
+            filemtime( $editor_js ), // Version based on file modification time
             true 
         );
 
@@ -92,12 +97,31 @@ function delikaktus_recipes_enqueue_editor_scripts() {
 
         // Localize script with the current language
         wp_localize_script( 'delikaktus-recipes-editor-js', 'recipeEditorData', array(
-            'currentLanguage' => $current_language,
-            'unitSystem' => isset($attributes['unitSystem']) ? $attributes['unitSystem'] : 'metric', // Add your desired attribute here
+            'currentLanguage' => sanitize_text_field( $current_language ),
+            'unitSystem' => isset($attributes['unitSystem']) ? sanitize_text_field( $attributes['unitSystem'] ) : 'metric', // Add your desired attribute here
+            'fractions' => delikaktus_get_fraction_list(), // Pass the fractions list
         ));
     }
+
+    // Enqueue the block editor CSS, editorSyle in block.json
+    $editor_css = plugin_dir_path( __FILE__ ) . 'index.css';
+
+    // Log an error if the file is missing
+    if ( ! file_exists( $editor_css ) ) {
+        error_log( 'Editor CSS file not found: ' . $editor_css );
+    }
+
+    if ( file_exists( $editor_css ) ) {
+        wp_enqueue_style(
+            'delikaktus-recipes-editor-css',
+            plugin_dir_url( __FILE__ ) . 'index.css',
+            array(),
+            filemtime( $editor_css ) // Version based on file modification time
+        );
+    }
+    
 }
-add_action( 'enqueue_block_editor_assets', 'delikaktus_recipes_enqueue_editor_scripts' );
+add_action( 'enqueue_block_assets', 'delikaktus_recipes_enqueue_editor_assets' );
 
 /**
  * Enqueues frontend scripts and passes localized data.

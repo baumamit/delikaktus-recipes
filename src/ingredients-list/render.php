@@ -5,15 +5,15 @@
 
 //error_log(print_r($attributes, true));
 
+// Check the debug.log file in wp-content to verify that the attributes are being passed correctly
+error_log(print_r($attributes, true));
+
 
 // Assuming $attributes are passed to the render.php function
 // from the block's attributes set by the user in the block editor edit.js
 $attributes = isset($attributes) ? $attributes : []; // Ensure $attributes is defined
 $unitSystem = isset($attributes['unitSystem']) ? $attributes['unitSystem'] : 'metric'; // Default to 'metric' if not set
 $portionsAmount = isset($attributes['portionsAmount']) ? $attributes['portionsAmount'] : 1;  // Default to 1 portion if not set
-
-// Check the debug.log file in wp-content to verify that the attributes are being passed correctly
-error_log(print_r($attributes, true));
 
 // Enqueue your frontend JavaScript file
 wp_enqueue_script(
@@ -29,6 +29,7 @@ wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', $attrib
 
 // Define a mapping between numeric values and their fraction symbols
 $fractionMap = [
+    "0" => "",
     "0.125" => "⅛",
     "0.25"  => "¼",
     "0.3333"  => "⅓",
@@ -61,8 +62,10 @@ $fractionMap = [
         <?php if (!empty($attributes['ingredients']) && is_array($attributes['ingredients'])) :
             foreach ($attributes['ingredients'] as $ingredient) :
                 $unitType = isset($ingredient['unitType']) ? esc_html($ingredient['unitType']) : '';
-                $quantity = isset($ingredient['quantity']) ? esc_html($ingredient['quantity']) : 0;
-                $quantityFractionValue = isset($ingredient['quantityFraction']) ? esc_html($ingredient['quantityFraction']) : '';
+                $quantity = !empty($ingredient['quantity']) ? esc_html($ingredient['quantity']) : 0;
+                $quantityFractionValue = !empty($ingredient['quantityFraction']) ? esc_html($ingredient['quantityFraction']) : 0;
+                //error_log("Quantity: " . print_r($quantity, true));
+                //error_log("Quantity Fraction: " . print_r($quantityFractionValue, true));
                 $unitChoice = isset($ingredient['unitChoice']) ? esc_html($ingredient['unitChoice']) : '';
                 $name = isset($ingredient['name']) ? esc_html($ingredient['name']) : '';
         

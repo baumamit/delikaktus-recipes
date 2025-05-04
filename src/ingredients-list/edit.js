@@ -1,3 +1,5 @@
+console.log('edit.js loaded');
+
 /**
  * Retrieves the translation of text.
  *
@@ -217,6 +219,7 @@ export default function Edit(props) {
 
     const handleIngredientChange = (index, key, value) => {
         const newIngredients = ingredients.map((ingredient, i) =>
+            // Update only the changed ingredients[index].key
             i === index
             ? { ...ingredient, [key]: value }
             : ingredient
@@ -288,13 +291,14 @@ export default function Edit(props) {
 
     // Handle quantity change
     const handleQuantityChange = (index, e) => {
-        // Update the quantity in the ingredient
-        handleIngredientChange(index, 'quantity', e.target.value);
-    };
+        // Update the quantity as a valid number or a fallback value of 0
+        handleIngredientChange(index, 'quantity', Number.parseFloat(e.target.value) || 0);
+   };
 
     // Handle quantity fraction change
     const handleQuantityFractionChange = (index, e) => {
-        handleIngredientChange(index, 'quantityFraction', parseFloat(e.target.value) );
+        // Update the quantity fraction as a valid number or a fallback value of 0
+        handleIngredientChange(index, 'quantityFraction', Number.parseFloat(e.target.value) || 0);
     };
 
     // Handle ingredient name change
@@ -384,7 +388,9 @@ export default function Edit(props) {
                                     className='delikaktus-recipes-input-quantity'
                                     type="number"
                                     label='How much of this ingredient?'
-                                    value={ingredient.quantity !== undefined ? ingredient.quantity.toString() : ""}
+                                    name="Quantity"
+                                    value={ isNaN(ingredient.quantity) ? "0" : ingredient.quantity.toString()}
+                                    /* value={ingredient.quantity !== undefined ? ingredient.quantity.toString() : ""} */
                                     aria-label="Enter quantity"
                                     min="0"
                                 />
@@ -395,7 +401,7 @@ export default function Edit(props) {
                                         onChange={(e) => handleQuantityFractionChange(index, e)}
                                         name="Quantity Fraction"
                                         className="delikaktus-recipes-input-quantity-fraction"
-                                        value={ingredient.quantityFraction !== undefined ? ingredient.quantityFraction.toString() : ""}
+                                        value={ isNaN(ingredient.quantityFraction) ? "0" : ingredient.quantityFraction.toString()}
                                         aria-label="Select quantity fraction"
                                         title='Select quantity fraction'
                                     >
