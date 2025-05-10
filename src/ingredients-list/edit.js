@@ -95,15 +95,15 @@ const unitOptions = {
 
 const fractionOptions = [
     { value: 0, label: '' },
-    { value: 0.125, label: '⅛' },
-    { value: 0.25, label: '¼' },
-    { value: 0.33, label: '⅓' },
-    { value: 0.375, label: '⅜' },
-    { value: 0.5, label: '½' },
-    { value: 0.625, label: '⅝' },
-    { value: 0.66, label: '⅔' },
-    { value: 0.75, label: '¾' },
-    { value: 0.875, label: '⅞' },
+    { value: 1/8, label: '⅛' },
+    { value: 1/4, label: '¼' },
+    { value: 1/3, label: '⅓' },
+    { value: 3/8, label: '⅜' },
+    { value: 1/2, label: '½' },
+    { value: 5/8, label: '⅝' },
+    { value: 2/3, label: '⅔' },
+    { value: 3/4, label: '¾' },
+    { value: 7/8, label: '⅞' },
 ];
 
 // Function to translate terms based on current language
@@ -329,7 +329,7 @@ export default function Edit(props) {
             </BlockControls>
 
             <PortionsEditPanel
-                promptText={'How many portions?'}
+                promptText={'For how many portions is this recipe?'}
                 portionsMode={portionsMode}
                 portions={portionsAmount}
                 setPortions={(newPortionsAmount) => setAttributes({ portionsAmount: newPortionsAmount })}

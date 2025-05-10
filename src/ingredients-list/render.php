@@ -31,13 +31,13 @@ wp_localize_script('delikaktus-recipes-frontend-js', 'recipeEditorData', $attrib
 $fractionMap = [
     "0" => "",
     "0.125" => "⅛",
-    "0.25"  => "¼",
-    "0.3333"  => "⅓",
+    "0.250"  => "¼",
+    "0.333"  => "⅓",
     "0.375" => "⅜",
-    "0.5"   => "½",
+    "0.500"   => "½",
     "0.625" => "⅝",
-    "0.6667"  => "⅔",
-    "0.75"  => "¾",
+    "0.667"  => "⅔",
+    "0.750"  => "¾",
     "0.875" => "⅞"
 ];
 ?>
@@ -61,18 +61,30 @@ $fractionMap = [
     <div class="delikaktus-recipes-ingredients-list-container">
         <?php if (!empty($attributes['ingredients']) && is_array($attributes['ingredients'])) :
             foreach ($attributes['ingredients'] as $ingredient) :
-                $unitType = isset($ingredient['unitType']) ? esc_html($ingredient['unitType']) : '';
-                $quantity = !empty($ingredient['quantity']) ? esc_html($ingredient['quantity']) : 0;
-                $quantityFractionValue = !empty($ingredient['quantityFraction']) ? esc_html($ingredient['quantityFraction']) : 0;
+                $unitType = isset($ingredient['unitType'])
+                    ? esc_html($ingredient['unitType'])
+                    : '';
+                $quantity = !empty($ingredient['quantity'])
+                    ? esc_html($ingredient['quantity'])
+                    : 0;
+                $quantityFractionValue = !empty($ingredient['quantityFraction'])
+                    ? esc_html($ingredient['quantityFraction'])
+                    : 0;
+                // Convert numeric fraction to fraction symbol corresponding to the value with 3 decimal places
+                $quantityFractionSymbol = ($ingredient['quantityFraction'] == 0)
+                    ? ""
+                    : ($fractionMap[number_format($ingredient['quantityFraction'], 3)] ?? "");
                 //error_log("Quantity: " . print_r($quantity, true));
                 //error_log("Quantity Fraction: " . print_r($quantityFractionValue, true));
-                $unitChoice = isset($ingredient['unitChoice']) ? esc_html($ingredient['unitChoice']) : '';
-                $name = isset($ingredient['name']) ? esc_html($ingredient['name']) : '';
+                $unitChoice = isset($ingredient['unitChoice'])
+                    ? esc_html($ingredient['unitChoice'])
+                    : '';
+                $name = isset($ingredient['name'])
+                    ? esc_html($ingredient['name'])
+                    : '';
         
-                // Convert numeric fraction to fraction symbol
-                $quantityFractionSymbol = $fractionMap[$quantityFractionValue] ?? "";
                 ?>
-                <label class="delikaktus-recipes-ingredient-item" data-key="<?php echo esc_attr($ingredient['id'] ?? $index); ?>">
+                <label class="delikaktus-recipes-ingredient-item" data-key="<?php echo esc_attr($ingredient['id'] ?? $index); ?>" data-unit-type="<?php echo $unitType; ?>">
                     <input type="checkbox"
                         class="delikaktus-recipes-ingredients-list-checkbox"
                         aria-label="Checkbox for ingredient: <?php echo $name; ?>"
