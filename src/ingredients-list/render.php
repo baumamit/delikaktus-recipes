@@ -84,7 +84,10 @@ $fractionMap = [
                     : '';
         
                 ?>
-                <label class="delikaktus-recipes-ingredient-item" data-key="<?php echo esc_attr($ingredient['id'] ?? $index); ?>" data-unit-type="<?php echo $unitType; ?>">
+                <label class="delikaktus-recipes-ingredient-item"
+                    data-key="<?php echo esc_attr($ingredient['id'] ?? $index); ?>"
+                    data-unit-type="<?php echo $unitType; ?>"
+                >
                     <input type="checkbox"
                         class="delikaktus-recipes-ingredients-list-checkbox"
                         aria-label="Checkbox for ingredient: <?php echo $name; ?>"
@@ -94,17 +97,22 @@ $fractionMap = [
 
                     <span class="ingredient-quantity"
                         aria-live="polite"
-                        data-quantity="<?php echo $quantity; ?>">
+                        data-quantity="<?php echo $quantity; ?>"
+                    >
                         <?php echo ($quantity > 0) ? $quantity : ''; ?>
                     </span>
 
                     <span class="ingredient-quantity-fraction" 
                         aria-live="polite"
-                        data-quantity-fraction="<?php echo $quantityFractionValue; ?>">
+                        data-quantity-fraction="<?php echo $quantityFractionValue; ?>"
+                    >
                         <?php echo $quantityFractionSymbol ? $quantityFractionSymbol : ""; ?>
                     </span>
 
-                    <span class="ingredient-unit-choice" aria-live="polite">
+                    <span class="ingredient-unit-choice"
+                        aria-live="polite"
+                        data-unit-choice="<?php echo $unitChoice; ?>"
+                    >
                         <?php echo $unitChoice; ?>
                     </span>
 
