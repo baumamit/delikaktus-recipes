@@ -81,8 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (portionsInput) {
         portionsInput.addEventListener("input", function () {
-            console.log('\n\n\n');
-
             // Ensure the value is positive number
             if (isNaN(this.value) || this.value <= 0) {
                 this.value = portionsAmount; // Reset to 1 if the value is less than 1
@@ -94,8 +92,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             for (let index = 0; index < ingredientElements.length; index++) {
                 const unitType = ingredientElements[index].dataset.unitType;
-                //const unitChoice = ingredientElements[index].dataset.unitChoice;
-                //const unitChoice = unitChoiceElements[index].textContent.trim();
                 const unitChoice = originalUnitChoices[index];
 
                 // Calculate the original total quantity as a number
@@ -103,39 +99,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 const originalFraction = Number.parseFloat(originalFractions[index]) || 0;
                 const originalUnitChoice = originalUnitChoices[index];
                 let newNumber = (originalQuantity + originalFraction) * portionsRatio;
-                //console.log('newNumber = ', newNumber);
-                 let newUnitChoice = originalUnitChoice;
-                //let newUnitChoice = unitChoiceElements[index].textContent.trim();
-                //console.log('newUnitChoice before the loop = ', newUnitChoice);
-
+                let newUnitChoice = originalUnitChoice;
 
                 // Keep original values for each iteration
                 let newQuantity = originalQuantity;
                 let newFraction = originalFraction;
                 let roundedNewNumber = 0;
 
-
-                // Convert kg and L to g and ml
-                /* if (originalUnitChoice == "kg" || originalUnitChoice == "L") {
-                    newNumber = newNumber * 1000;
-                    newUnitChoice = originalUnitChoice == "kg" ? "g" : "ml";
-                } */
-
-
-
-                //console.log('unitSystem unitType = ', unitSystem+" "+unitType);
                 switch (unitSystem) {
                     case "metric":
                         if ((unitType === 'mass') || (unitType === 'volume')) {
-                            // Convert kg and L to g and ml
-                            /* console.log('unitChoice = ', unitChoice);
-                            console.log('is it kg or L ? ', unitChoice == "kg" || unitChoice == "L");
-                            console.log('is it g or ml ? ', unitChoice == "g" || unitChoice == "ml"); */
-
-                            console.log(`Original: ${originalQuantity}${unitChoice}, Ratio: ${portionsRatio}`);
-                            console.log(`→ Converted number: ${newNumber}`);
-                            console.log(`→ New unit: ${newUnitChoice}`);
-
                             // Handle conversion to the appropriate unit choice, between kg/L and g/ml
                             if (newNumber >= 1000) {
                                 newUnitChoice = unitType === "mass" ? "kg" : "L";
@@ -147,16 +120,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 // Keep current unit if not crossing conversion thresholds
                                 newUnitChoice = originalUnitChoice;
                             }
-                            /* if ((originalUnitChoice  === "kg" || originalUnitChoice  === "L") && newNumber < 1) {
-                                newNumber *= 1000;
-                                newUnitChoice = originalUnitChoice  === "kg" ? "g" : "ml";
-                            } else if ((originalUnitChoice  === "g" || originalUnitChoice  === "ml") && newNumber >= 1000) {
-                                newNumber /= 1000;
-                                newUnitChoice = originalUnitChoice  === "g" ? "kg" : "L";
-                            } */
 
                             // Re-check and round according to magnitude and the appropriate unit choice
-                            if (unitChoice === "kg" || unitChoice === "L") {
+                            if (newUnitChoice  === "kg" || newUnitChoice  === "L") {
                                 // Round to nearest 0.05 kg/L
                                 newQuantity = Math.round(newNumber / 0.05) * 0.05;
                                 newQuantity = parseFloat(newQuantity.toFixed(2)); // Ensure two decimal places
@@ -180,69 +146,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             // Always update DOM
                             // Update the quantity textContent field with the total number, blank if 0
                             quantityElements[index].textContent = newQuantity.toFixed(2).replace(/\.00$/, "");
+                            // Update the fraction textContent field to blank, as it is not used for metric units
                             fractionElements[index].textContent = "";
+                            // Update the unit choice textContent field
                             unitChoiceElements[index].textContent = newUnitChoice;
 
-                            /* if (unitChoice == "kg" || unitChoice == "L") {
-                                if (newNumber < 1) {
-                                    newNumber = newNumber * 1000;
-                                    //newUnitChoice = ( (unitChoice == "kg") ? "g" : "ml" );
-                                    newUnitChoice = (newUnitChoice == "kg") ? "g" : "ml";
-                                    quantityElements[index].textContent = newNumber.toFixed(2).replace(/\.00$/, ""); // Remove unnecessary decimals and convert to a string
-                                    fractionElements[index].textContent = "";
-                                    unitChoiceElements[index].textContent = newUnitChoice;
-                                    console.log('multiplyed by 1000');
-                                    console.log('newUnitChoice = ', newUnitChoice);
-                                }
-                                // Convert g and ml to kg and L
-                            } else if (unitChoice == "g" || unitChoice == "ml") {
-                                if (newNumber >= 1000) {
-                                    newNumber = newNumber / 1000;
-                                    //newUnitChoice = ( (unitChoice == "g") ? "kg" : "L" );
-                                    newUnitChoice = (newUnitChoice == "g") ? "kg" : "L";
-                                    quantityElements[index].textContent = newNumber.toFixed(2).replace(/\.00$/, ""); // Remove unnecessary decimals and convert to a string
-                                    fractionElements[index].textContent = "";
-                                    unitChoiceElements[index].textContent = newUnitChoice;
-                                    console.log('divided by 1000');
-                                    console.log('newUnitChoice = ', newUnitChoice);
-                                }
-                            } */
-                            /* roundedNewNumber = newNumber;
-                            console.log('roundedNewNumber = ', roundedNewNumber);
-                            
-
-                            if (newNumber < 1) {
-                                roundedNewNumber = Math.round(newNumber * 10) / 10; // Round to the closest tenths of a unit
-                            } else if (newNumber < 10) {
-                                roundedNewNumber = Math.round(newNumber * 2) / 2; // Round to the closest half of a unit
-                            } else if (newNumber < 100) {
-                                roundedNewNumber = Math.round(newNumber); // Round to the closest unit
-                            } else if (newNumber < 1000) {
-                                roundedNewNumber = Math.round(newNumber / 5) * 5; // Round to the nearest 5 units
-                            } else if (newNumber >= 1000) {
-                                roundedNewNumber = Math.round(newNumber / 10) * 10; */ // Round to the nearest 25 units
-                                // Change unit choice for large amounts of g or ml
-                                /* if (newUnitChoice == "g") {
-                                    roundedNewNumber = roundedNewNumber / 1000;
-                                    newUnitChoice = "kg";
-                                } else if (newUnitChoice == "ml") {
-                                    roundedNewNumber = roundedNewNumber / 1000;
-                                    newUnitChoice = "L";
-                                }
-                                unitChoiceElements[index].textContent = newUnitChoice; */
-                            /* }
-                            newQuantity = roundedNewNumber;
-                            // Update the data-quantity text content as the total number, blank if 0
-                            quantityElements[index].textContent = newQuantity > 0 ? newQuantity.toFixed(2).replace(/\.00$/, "") : ""; // Remove unnecessary decimals and convert to a string
-                            unitChoiceElements[index].textContent = newUnitChoice; */
-
-
-
-
-
-
-                        /* } else { // unitType is tool or by the eye
-                            if (newNumber < 2) {
+                        } else { // unitType is "tool" or by the "eye"
+                            if (newNumber < 5) {
                                 roundedNewNumber = newNumber;
                             } else if (newNumber < 10) {
                                 roundedNewNumber = Math.round(newNumber * 2) / 2; // Round to the closest half of a unit
@@ -263,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             // Update the data-quantity attribute value to keep the total quantity with the fractions
                             newQuantity = roundedNewNumber - newFraction;
                             // Update the data-quantity text content
-                            quantityElements[index].textContent = newQuantity > 0 ? newQuantity : ""; */
+                            quantityElements[index].textContent = newQuantity > 0 ? newQuantity : "";
                             //quantityElement.textContent = newQuantity > 0 ? newQuantity : ""; // Remove unnecessary decimals and convert to a string
                         }
                         break;
