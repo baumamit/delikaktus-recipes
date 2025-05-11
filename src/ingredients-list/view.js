@@ -136,14 +136,24 @@ document.addEventListener("DOMContentLoaded", function () {
                             console.log(`→ Converted number: ${newNumber}`);
                             console.log(`→ New unit: ${newUnitChoice}`);
 
-                            // Handle conversion between kg/L and g/ml if needed
-                            if ((unitChoice === "kg" || unitChoice === "L") && newNumber < 1) {
-                                newNumber *= 1000;
-                                newUnitChoice = unitChoice === "kg" ? "g" : "ml";
-                            } else if ((unitChoice === "g" || unitChoice === "ml") && newNumber >= 1000) {
-                                newNumber /= 1000;
-                                newUnitChoice = unitChoice === "g" ? "kg" : "L";
+                            // Handle conversion to the appropriate unit choice, between kg/L and g/ml
+                            if (newNumber >= 1000) {
+                                newUnitChoice = unitType === "mass" ? "kg" : "L";
+                                newNumber = newNumber / 1000;
+                            } else if (newNumber < 1) {
+                                newUnitChoice = unitType === "mass" ? "g" : "ml";
+                                newNumber = newNumber * 1000;
+                            } else {
+                                // Keep current unit if not crossing conversion thresholds
+                                newUnitChoice = originalUnitChoice;
                             }
+                            /* if ((originalUnitChoice  === "kg" || originalUnitChoice  === "L") && newNumber < 1) {
+                                newNumber *= 1000;
+                                newUnitChoice = originalUnitChoice  === "kg" ? "g" : "ml";
+                            } else if ((originalUnitChoice  === "g" || originalUnitChoice  === "ml") && newNumber >= 1000) {
+                                newNumber /= 1000;
+                                newUnitChoice = originalUnitChoice  === "g" ? "kg" : "L";
+                            } */
 
                             // Re-check and round according to magnitude and the appropriate unit choice
                             if (unitChoice === "kg" || unitChoice === "L") {
