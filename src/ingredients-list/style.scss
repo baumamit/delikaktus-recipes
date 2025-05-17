@@ -76,7 +76,7 @@
 }
 
 /* Strikethrough effect when checked */
-.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox:checked ~ .delikaktus-recipes-ingredients-list-ingredient-text {
+.wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-list-checkbox:checked ~ * {
     color: var(--wp--preset--color--text, var(--wp--preset--color--contrast, black));
     opacity: 0.6; /* Makes it appear lighter */
     text-decoration: line-through var(--wp--preset--color--tertiary);

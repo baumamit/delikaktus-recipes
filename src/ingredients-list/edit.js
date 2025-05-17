@@ -1,5 +1,3 @@
-console.log('edit.js loaded');
-
 /**
  * Retrieves the translation of text.
  *
@@ -364,24 +362,24 @@ export default function Edit(props) {
                                     <IconArrowDown />
                                 </button>
                             </div>
+                            {/* Unit Type */}
+                            <select
+                                onChange={(e) => handleUnitTypeChange(index, e)}
+                                name="Unit Type"
+                                value={ingredient.unitType}
+                                className="delikaktus-recipes-input-unit-type"
+                                aria-label="Select unit type for ingredient"
+                                title="Select unit type for ingredient"
+                            >
+                                <option value={UnitType.EYE} title='By the eye'>👁</option>
+                                <option value={UnitType.MASS} title='Mass'>⚖️</option>
+                                <option value={UnitType.VOLUME} title='Volume'>💧</option>
+                                <option value={UnitType.TOOL} title='Tool'>🥄</option>
+                            </select>
+
 
                             {/* Container for the ingredient item inputs */}
                             <div className="delikaktus-recipes-ingredient-inputs">
-                                {/* Unit Type */}
-                                <select
-                                    onChange={(e) => handleUnitTypeChange(index, e)}
-                                    name="Unit Type"
-                                    value={ingredient.unitType}
-                                    className="delikaktus-recipes-input-unit-type"
-                                    aria-label="Select unit type for ingredient"
-                                    title="Select unit type for ingredient"
-                                >
-                                    <option value={UnitType.EYE} title='By the eye'>👁</option>
-                                    <option value={UnitType.MASS} title='Mass'>⚖️</option>
-                                    <option value={UnitType.VOLUME} title='Volume'>💧</option>
-                                    <option value={UnitType.TOOL} title='Tool'>🥄</option>
-                                </select>
-
                                 {/* Quantity */}
                                 <input
                                     onChange={(e) => handleQuantityChange(index, e)}

@@ -32,7 +32,7 @@
 /* ----- INGREDIENT ITEM ----- */
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-item {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center; /* Vertically align all elements inside each ingredient item */
     gap: 0.5rem; /* Adjust spacing between elements */
 }
