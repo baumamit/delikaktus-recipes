@@ -35,7 +35,8 @@
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-item {
     display: flex;
     flex-wrap: wrap;
-    /* width: 100%; */
+    flex-direction: row;
+    width: 100%;
     align-items: center; /* Vertically align all elements inside each ingredient item */
     gap: 0.5rem; /* Adjust spacing between elements */
 }

@@ -308,7 +308,7 @@ export default function Edit(props) {
     return (
         <div {...useBlockProps()}>
             <BlockControls>
-                <ToolbarGroup label={__('Unit System', 'ingredients-list')} aria-label="Unit System">
+                <ToolbarGroup>
                     <ToolbarButton
                         id='toolbar-button-unit-system'
                         icon={getUnitSystemIcon()}
