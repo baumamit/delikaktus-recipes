@@ -308,7 +308,7 @@ export default function Edit(props) {
     return (
         <div {...useBlockProps()}>
             <BlockControls>
-                <ToolbarGroup>
+                <ToolbarGroup label={__('Unit System', 'ingredients-list')} aria-label="Unit System">
                     <ToolbarButton
                         id='toolbar-button-unit-system'
                         icon={getUnitSystemIcon()}
@@ -362,6 +362,7 @@ export default function Edit(props) {
                                     <IconArrowDown />
                                 </button>
                             </div>
+
                             {/* Unit Type */}
                             <select
                                 onChange={(e) => handleUnitTypeChange(index, e)}
@@ -378,65 +379,62 @@ export default function Edit(props) {
                             </select>
 
 
-                            {/* Container for the ingredient item inputs */}
-                            <div className="delikaktus-recipes-ingredient-inputs">
-                                {/* Quantity */}
-                                <input
-                                    onChange={(e) => handleQuantityChange(index, e)}
-                                    className='delikaktus-recipes-input-quantity'
-                                    type="number"
-                                    label='How much of this ingredient?'
-                                    name="Quantity"
-                                    value={ isNaN(ingredient.quantity) ? "0" : ingredient.quantity.toString()}
-                                    /* value={ingredient.quantity !== undefined ? ingredient.quantity.toString() : ""} */
-                                    aria-label="Enter quantity"
-                                    min="0"
-                                />
+                            {/* Quantity */}
+                            <input
+                                onChange={(e) => handleQuantityChange(index, e)}
+                                className='delikaktus-recipes-input-quantity'
+                                type="number"
+                                label='How much of this ingredient?'
+                                name="Quantity"
+                                value={ isNaN(ingredient.quantity) ? "0" : ingredient.quantity.toString()}
+                                /* value={ingredient.quantity !== undefined ? ingredient.quantity.toString() : ""} */
+                                aria-label="Enter quantity"
+                                min="0"
+                            />
 
-                                {/* Quantity Fraction */}
-                                {(ingredient.unitType === "eye" || ingredient.unitType === "tool") && (
-                                    <select
-                                        onChange={(e) => handleQuantityFractionChange(index, e)}
-                                        name="Quantity Fraction"
-                                        className="delikaktus-recipes-input-quantity-fraction"
-                                        value={ isNaN(ingredient.quantityFraction) ? "0" : ingredient.quantityFraction.toString()}
-                                        aria-label="Select quantity fraction"
-                                        title='Select quantity fraction'
-                                    >
-                                        {fractionOptions.map(({ value, label }) => (
-                                            <option key={value} value={value}>{label}</option>
-                                        ))}                                    
-                                    </select>
-                                )}
+                            {/* Quantity Fraction */}
+                            {(ingredient.unitType === "eye" || ingredient.unitType === "tool") && (
+                                <select
+                                    onChange={(e) => handleQuantityFractionChange(index, e)}
+                                    name="Quantity Fraction"
+                                    className="delikaktus-recipes-input-quantity-fraction"
+                                    value={ isNaN(ingredient.quantityFraction) ? "0" : ingredient.quantityFraction.toString()}
+                                    aria-label="Select quantity fraction"
+                                    title='Select quantity fraction'
+                                >
+                                    {fractionOptions.map(({ value, label }) => (
+                                        <option key={value} value={value}>{label}</option>
+                                    ))}                                    
+                                </select>
+                            )}
 
-                                {/* Unit Choice */}
-                                {/* Render <select> in metric or imperial unitSystem if the unitType not "by the eye" or in the single case that unitSystem is "default" and the unitType is "tool" */}
-                                {displayUnitChoice && (
-                                    <select
-                                        onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)}
-                                        name="Unit Choice"
-                                        className="delikaktus-recipes-input-unit-choice"
-                                        value={ingredient.unitChoice}
-                                        aria-label="Select measurement unit"
-                                        title='Select measurement unit'
-                                    >
-                                        {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option) => (
-                                            <option key={option} value={option}>{getTranslation(option)}</option>
-                                        ))}
-                                    </select>
-                                )}
+                            {/* Unit Choice */}
+                            {/* Render <select> in metric or imperial unitSystem if the unitType not "by the eye" or in the single case that unitSystem is "default" and the unitType is "tool" */}
+                            {displayUnitChoice && (
+                                <select
+                                    onChange={(e) => handleIngredientChange(index, 'unitChoice', e.target.value)}
+                                    name="Unit Choice"
+                                    className="delikaktus-recipes-input-unit-choice"
+                                    value={ingredient.unitChoice}
+                                    aria-label="Select measurement unit"
+                                    title='Select measurement unit'
+                                >
+                                    {(unitOptions[unitSystem]?.[ingredient.unitType] || []).map((option) => (
+                                        <option key={option} value={option}>{getTranslation(option)}</option>
+                                    ))}
+                                </select>
+                            )}
 
-                                {/* Ingredient Name */}
-                                <input
-                                    onChange={(e) => handleNameChange(index, e)}
-                                    className='delikaktus-recipes-input-ingredient-name'
-                                    type="text"
-                                    placeholder='Ingredient name...'
-                                    value={ingredient.name}
-                                    aria-label="Enter ingredient name"
-                                    title='Enter ingredient name'
-                                />
-                            </div>
+                            {/* Ingredient Name */}
+                            <input
+                                onChange={(e) => handleNameChange(index, e)}
+                                className='delikaktus-recipes-input-ingredient-name'
+                                type="text"
+                                placeholder='Ingredient name...'
+                                value={ingredient.name}
+                                aria-label="Enter ingredient name"
+                                title='Enter ingredient name'
+                            />
 
                             {/* Button to delete the ingredient item from the list */}
                             <button

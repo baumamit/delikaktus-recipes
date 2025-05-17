@@ -8,11 +8,13 @@
     display: flex;
     flex-direction: column;
     row-gap: 2rem;
+    font-size: inherit;
 }
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list * {
     margin: 0;
     padding: 0;
     transition: 100ms;
+    font-size: inherit;
 }
 
 /* ----- BUTTONS ----- */
@@ -33,6 +35,7 @@
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-item {
     display: flex;
     flex-wrap: wrap;
+    /* width: 100%; */
     align-items: center; /* Vertically align all elements inside each ingredient item */
     gap: 0.5rem; /* Adjust spacing between elements */
 }
@@ -44,7 +47,7 @@
 }
 
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button {
-    font-size: large;
+    display: block;
     color: var(--wp--preset--color--text, var(--wp--preset--color--contrast, black));
     border-radius: 0.3em;
     height: 100%;
@@ -63,17 +66,7 @@
 }
 
 /* *** INPUTS *** */
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-inputs {
-    display: flex;
-    flex-wrap: wrap;  /* Allows wrapping if space is limited */
-    /* align-self: center; */ /* Vertically center the elements, relevant if individual items needed to override the parent's alignment */
-    align-items: center; /* Vertically center the elements */
-    width: 100%;
-}
 
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-inputs * {
-    font-size: large;
-}
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-type {
     font-size: xx-large;
     border: none;
@@ -121,7 +114,7 @@
     color: rgb(240, 3, 3);
 }
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list button.delikaktus-recipes-ingredient-delete>* {
-    font-size: x-large;
+    font-size: xx-large;
 }
 
 /* ###### ADD INGREDIENT BUTTON ###### */
@@ -140,5 +133,5 @@
     color: rgb(12, 193, 12);
 }
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list button.delikaktus-recipes-ingredient-add>* {
-    font-size: xx-large;
+    font-size: 3rem;
 }
