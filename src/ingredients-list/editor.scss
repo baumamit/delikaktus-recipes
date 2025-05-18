@@ -28,7 +28,9 @@
 
 /* ###### INGREDIENTS CONTAINER ###### */
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredients-container {
-    row-gap: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
 }
 
 /* ----- INGREDIENT ITEM ----- */
@@ -38,66 +40,92 @@
     flex-direction: row;
     width: 100%;
     align-items: center; /* Vertically align all elements inside each ingredient item */
-    gap: 0.5rem; /* Adjust spacing between elements */
+    gap: 0.3rem; /* Adjust spacing between elements in the ingredient item row */
 }
 
 /* *** ARROW BUTTONS *** */
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows {
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-quantity-controllers {
     display: flex;
     flex-direction: column;
+    min-width: auto; // Override default min-width
+    min-height: auto; // Override default min-height}
+    margin: 0;
 }
 
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button {
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-quantity-controllers button {
     display: block;
     color: var(--wp--preset--color--text, var(--wp--preset--color--contrast, black));
-    border-radius: 0.3em;
-    height: 100%;
+    border-radius: 0.3rem;
+    padding: 0.2rem;
 }
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button:hover, 
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-type:hover {
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button:hover,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-quantity-controllers button:hover,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-type:hover,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity-fraction:hover {
     background-color: rgb(154, 54, 208);
     color: var(--wp--preset--color--background, var(--wp--preset--color--base, white));
 }
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button:active {
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button:active,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-quantity-controllers button:active,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-type:active,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity-fraction:active {
     background-color: rgb(197, 115, 241);
 }
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button svg {
-    /* height: 100%; */
-    text-align: center;
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-arrows button svg,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-ingredient-quantity-controllers button svg {
+    display: block; // Ensure SVG takes the full space of its parent
+    height: auto; // Let the height adjust based on the width (or vice versa)
+    width: 1.5rem;
+    max-width: 100%; // Ensure it doesn't exceed the button size
+    max-height: 100%;
 }
 
 /* *** INPUTS *** */
 
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-type {
-    font-size: xx-large;
+    font-size: 1.8em;
     border: none;
     background: none;
-    border-radius: 10rem;
-    padding: 0 0 0.4rem 0;
+    border-radius: 0.5rem;
+    padding-bottom: 0.4rem;
+    text-align: center;
 }
 
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-type,
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity,
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-choice,
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-ingredient-name,
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity-fraction {
-    margin-left: 0.3rem;
-}
-
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity-fraction,
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-choice {
-    padding: 0rem 1.5rem 0 0.1rem;
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-choice,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-ingredient-name {
+    padding: 0 0.5rem;
+    margin-left: 0.3rem;
 }
 
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity {
     width: 4rem;
-    padding: 0 0.3rem 0 0.1rem;
     text-align: end;
+    /* Clear default appearance of the input */
+    
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance:none; /* Remove arrows in WebKit browsers */
+    }
+    -moz-appearance: textfield; /* Remove arrows in Firefox */
+}
+
+
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-quantity-fraction,
+.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-unit-choice {
+    /* Clear default appearance of the input */
+    -webkit-appearance: none; /* Chrome, Safari, newer Edge */
+    -moz-appearance: none;    /* Firefox */
+    appearance: none;         /* Standard */
+    background: var(--wp--preset--color--background, var(--wp--preset--color--base, white));
+    background-image: none;   /* Optional: removes any default arrow image */
 }
 
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list .delikaktus-recipes-input-ingredient-name {
     min-width: 2rem;  /* Minimum width to prevent collapsing */
-    padding: 0 0.1rem 0 0.1rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -115,7 +143,7 @@
     color: rgb(240, 3, 3);
 }
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list button.delikaktus-recipes-ingredient-delete>* {
-    font-size: xx-large;
+    font-size: 1.5em;
 }
 
 /* ###### ADD INGREDIENT BUTTON ###### */
@@ -125,14 +153,11 @@
     right: 0;
     border: none;
     color: rgb(17, 114, 17);
-    /* width: 5rem; */
+    font-size: 3em;
 }
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list button.delikaktus-recipes-ingredient-add:hover {
     color: rgb(7, 55, 7);
 }
 .editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list button.delikaktus-recipes-ingredient-add:active {
     color: rgb(12, 193, 12);
-}
-.editor-styles-wrapper .wp-block-delikaktus-recipes-ingredients-list button.delikaktus-recipes-ingredient-add>* {
-    font-size: 3rem;
 }

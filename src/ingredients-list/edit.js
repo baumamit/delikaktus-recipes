@@ -24,7 +24,7 @@ import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { TbCircleLetterMFilled, TbCircleLetterIFilled, TbCircleDotFilled } from "react-icons/tb";
 import { GiKnifeFork as PortionsModeButton } from "react-icons/gi";
 import { MdAddToPhotos as IconAdd, MdDelete as IconDelete } from "react-icons/md";
-import { IoIosArrowUp as IconArrowUp, IoIosArrowDown as IconArrowDown } from "react-icons/io";
+import { IoIosArrowUp as IconArrowUp, IoIosArrowDown as IconArrowDown, IoIosAdd as IconPlus, IoIosRemove as IconMinus } from "react-icons/io";
 
 /**
  * Import custom components
@@ -290,8 +290,34 @@ export default function Edit(props) {
     // Handle quantity change
     const handleQuantityChange = (index, e) => {
         // Update the quantity as a valid number or a fallback value of 0
-        handleIngredientChange(index, 'quantity', Number.parseFloat(e.target.value) || 0);
+        const value = Number.parseFloat(e.target.value);
+        if (!isNaN(value)) {
+            handleIngredientChange(index, 'quantity', value);
+            return;
+        }
+        // else: do not update, so the previous value remains
    };
+
+    const increaseIngredientQuantity = (index) => {
+        const value = Number(ingredients[index].quantity) || 0; // Get the current value, defaulting to 0 if NaN
+        const step = value >= 1 ? 1 : 0.1; // Define the appropriate step based on the current value
+        const roundedDown = value >= 1
+                ? Math.floor(value)
+                : Math.floor(value*10)/10; // Round down to the nearest first decimal;
+        const newValue = parseFloat( (roundedDown + step).toFixed(1) ); // Increase the roundedDown value by the step and round to the nearest first decimal
+        handleIngredientChange(index, 'quantity', Math.min( 999, Math.max(0, newValue) )); // Update the quantity, bound between 0 and 999
+    };
+
+    const decreaseIngredientQuantity = (index) => {
+        const value = Number(ingredients[index].quantity) || 0; // Get the current value, defaulting to 0 if NaN
+        const step = value > 1 ? 1 : 0.1; // Define the appropriate step based on the current value
+        const roundedUp = value > 1
+                ? Math.ceil(value)
+                : Math.ceil(value*10)/10; // Round up to the nearest first decimal;
+        const newValue = parseFloat( (roundedUp - step).toFixed(1) ); // Decrease the roundedUp value by the step and round to the nearest first decimal
+        //const newValue = parseFloat((Math.ceil(value)-step).toFixed(1)); // Round appropriately to the nearest first decimal
+        handleIngredientChange(index, 'quantity', Math.min( 999, Math.max(0, newValue) )); // Update the quantity, bound between 0 and 999
+    };
 
     // Handle quantity fraction change
     const handleQuantityFractionChange = (index, e) => {
@@ -386,11 +412,31 @@ export default function Edit(props) {
                                 type="number"
                                 label='How much of this ingredient?'
                                 name="Quantity"
-                                value={ isNaN(ingredient.quantity) ? "0" : ingredient.quantity.toString()}
-                                /* value={ingredient.quantity !== undefined ? ingredient.quantity.toString() : ""} */
+                                value={ isNaN(ingredient.quantity) ? "" : ingredient.quantity.toString()}
                                 aria-label="Enter quantity"
                                 min="0"
+                                max="999"
                             />
+                            <div className='delikaktus-recipes-ingredient-quantity-controllers'>
+                                {/* Button to move ingredient up in the list */}
+                                <button
+                                    onClick={() => increaseIngredientQuantity(index)}
+                                    className='delikaktus-recipes-ingredient-quantity-increase'
+                                    aria-label='Increase quantity'
+                                    title='Increase quantity'
+                                >
+                                    <IconPlus />
+                                </button>
+                                {/* Button to move ingredient down in the list */}
+                                <button
+                                    onClick={() => decreaseIngredientQuantity(index)}
+                                    className='delikaktus-recipes-ingredient-quantity-decrease'
+                                    aria-label='Decrease quantity'
+                                    title='Decrease quantity'
+                                >
+                                    <IconMinus />
+                                </button>
+                            </div>
 
                             {/* Quantity Fraction */}
                             {(ingredient.unitType === "eye" || ingredient.unitType === "tool") && (
