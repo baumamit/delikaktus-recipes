@@ -299,24 +299,21 @@ export default function Edit(props) {
    };
 
     const increaseIngredientQuantity = (index) => {
-        const value = Number(ingredients[index].quantity) || 0; // Get the current value, defaulting to 0 if NaN
+        const value = Number(ingredients[index].quantity) || 0; // Get the current value, default 0 if NaN
         const step = value >= 1 ? 1 : 0.1; // Define the appropriate step based on the current value
-        const roundedDown = value >= 1
-                ? Math.floor(value)
-                : Math.floor(value*10)/10; // Round down to the nearest first decimal;
-        const newValue = parseFloat( (roundedDown + step).toFixed(1) ); // Increase the roundedDown value by the step and round to the nearest first decimal
-        handleIngredientChange(index, 'quantity', Math.min( 999, Math.max(0, newValue) )); // Update the quantity, bound between 0 and 999
+        const eplsilon = 0.000001; // Adding an epsilon to avoid floating point errors in the division operation
+        const roundedDownValue = Math.floor(value/step+eplsilon)*step; // Round down to the nearest appropriate decimal, epsilon added
+        const newValue = parseFloat( (roundedDownValue + step).toFixed(1) ); // Increase by step and round to the nearest first decimal
+        handleIngredientChange(index, 'quantity', Math.min( 999, Math.max( 0, newValue ) )); // Update the quantity, bound between 0 and 999
     };
 
     const decreaseIngredientQuantity = (index) => {
-        const value = Number(ingredients[index].quantity) || 0; // Get the current value, defaulting to 0 if NaN
+        const value = Number(ingredients[index].quantity) || 0; // Get the current value, default 0 if NaN
         const step = value > 1 ? 1 : 0.1; // Define the appropriate step based on the current value
-        const roundedUp = value > 1
-                ? Math.ceil(value)
-                : Math.ceil(value*10)/10; // Round up to the nearest first decimal;
-        const newValue = parseFloat( (roundedUp - step).toFixed(1) ); // Decrease the roundedUp value by the step and round to the nearest first decimal
-        //const newValue = parseFloat((Math.ceil(value)-step).toFixed(1)); // Round appropriately to the nearest first decimal
-        handleIngredientChange(index, 'quantity', Math.min( 999, Math.max(0, newValue) )); // Update the quantity, bound between 0 and 999
+        const eplsilon = 0.000001; // Subtract an epsilon to avoid floating point errors in the division operation
+        const roundedUpValue = Math.ceil(value/step-eplsilon)*step; // Round up to the nearest appropriate decimal, epsilon subtracted
+        const newValue = parseFloat( (roundedUpValue - step).toFixed(1) ); // Decrease by step and round to the nearest first decimal
+        handleIngredientChange(index, 'quantity', Math.min( 999, Math.max( 0, newValue ) )); // Update the quantity, bound between 0 and 999
     };
 
     // Handle quantity fraction change
